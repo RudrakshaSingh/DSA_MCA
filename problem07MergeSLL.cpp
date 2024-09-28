@@ -35,8 +35,8 @@ void insertAtEnd(int value, Node *&head)
 
 Node *MergeLinkedList(Node *head1, Node *head2)
 {
-    Node *dummyNode = (Node *)malloc(sizeof(Node));
-    Node *temp = dummyNode;
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    Node *temp = newNode;
 
     while (head1 != nullptr && head2 != nullptr)
     {
@@ -52,7 +52,7 @@ Node *MergeLinkedList(Node *head1, Node *head2)
         }
         else
         {
-            temp->next = head1;8o0
+            temp->next = head1;
             head1 = head1->next;
 
             temp = temp->next;
@@ -68,7 +68,7 @@ Node *MergeLinkedList(Node *head1, Node *head2)
     if (head2 != nullptr)
         temp->next = head2;
 
-    return dummyNode->next; // Return merged list
+    return newNode->next; // Return merged list
 }
 
 void Display(Node *head)

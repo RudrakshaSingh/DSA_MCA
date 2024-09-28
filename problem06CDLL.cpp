@@ -82,14 +82,10 @@ void insertAtEnd(int value)
     }
     else
     {
-        Node *temp = head;
-        while (temp->next != head)
-        {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-        newNode->back = temp;
-        newNode->next = head;
+        Node *last = head->back; 
+        last->next = newNode;    
+        newNode->back = last;    
+        newNode->next = head;   
         head->back = newNode;
     }
     return;

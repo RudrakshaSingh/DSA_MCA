@@ -14,6 +14,11 @@ Node *head = nullptr;
 void traverseList()
 {
     cout << "---------------------------------" << endl;
+    if (head == nullptr)
+    {
+        cout << "The list is empty." << endl;
+        return;
+    }
     Node *temp = head;
     cout << "The linked list is: ";
     while (temp != nullptr)
@@ -94,7 +99,6 @@ void insertAfterGivenNode() {
     traverseList();
 }
 
-
 void deleteAtBeginning()
 {
     if (head == nullptr) {
@@ -119,8 +123,8 @@ void deleteAtEnd()
     // Check if there is only one node
     if (head->next == nullptr)
     {
-        free(head);     // Free the single node
-        head = nullptr; // List is now empty
+        free(head);    
+        head = nullptr; 
         cout << "The only node in the list has been deleted." << endl;
         traverseList();
         return;
@@ -148,7 +152,7 @@ void deleteTheGivenNode() {
         return;
     }
 
-    // node to be deleted is the head node
+    // node to be deleted is head 
     if (head->data == givenNode) {
         Node *temp = head;
         head = head->next;
@@ -172,7 +176,7 @@ void deleteTheGivenNode() {
         return;
     }
 
-    // Node found, perform deletion
+    // Node found,  deletion
     previous->next = current->next;
     free(current);
 
