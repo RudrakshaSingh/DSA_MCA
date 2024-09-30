@@ -13,7 +13,7 @@ void createStack()
         cout << "Invalid size. Setting stack size to 100." << endl;
         n = 100;
     }
-    top = -1; // Reset top for the new stack
+    top = -1;
 }
 
 void push(int val)
@@ -79,41 +79,35 @@ int main()
     cout << "STACK CREATED" << endl;
     cout << endl;
 
-    do
+    bool conti = true;
+    while (conti)
     {
         cout << "=================================================================================" << endl;
 
-        cout << "(1) Create Stack         ";
-        cout << "(2) Push in stack             ";
-        cout << "(3) Pop from stack" << endl;
-        cout << "(4) Peek at top element  ";
-        cout << "(5) Check if stack is empty   ";
-        cout << "(6) Check if stack is full" << endl;
-        cout << "(7) Get stack size       ";
-        cout << "(8) Exit" << endl;
+        cout << "(1) Push in stack             ";
+        cout << "(2) Pop from stack             ";
+        cout << "(3) Peek at top element" << endl;
+        cout << "(4) Check if stack is empty   ";
+        cout << "(5) Check if stack is full     ";
+        cout << "(6) Get stack size       " << endl;
 
-        cout << "Enter choice: " << endl;
+        cout << "Enter choice: ";
         cin >> ch;
         switch (ch)
         {
         case 1:
         {
-            createStack();
-            break;
-        }
-        case 2:
-        {
-            cout << "Enter value to be pushed:" << endl;
+            cout << "Enter value to be pushed:";
             cin >> val;
             push(val);
             break;
         }
-        case 3:
+        case 2:
         {
             pop();
             break;
         }
-        case 4:
+        case 3:
         {
             int topElement = peek();
             if (topElement != -1)
@@ -122,24 +116,19 @@ int main()
             }
             break;
         }
-        case 5:
+        case 4:
         {
             cout << (isEmpty() ? "Stack is empty." : "Stack is not empty.") << endl;
             break;
         }
-        case 6:
+        case 5:
         {
             cout << (isFull() ? "Stack is full." : "Stack is not full.") << endl;
             break;
         }
-        case 7:
+        case 6:
         {
             cout << "Stack size: " << size() << endl;
-            break;
-        }
-        case 8:
-        {
-            cout << "Exit" << endl;
             break;
         }
         default:
@@ -147,7 +136,20 @@ int main()
             cout << "Invalid Choice" << endl;
         }
         }
-    } while (ch != 8);
+
+        cout << endl;
+        char choice;
+        cout << "Do you want to continue (y/n)?" << endl;
+        cin >> choice;
+        if (choice == 'y' || choice == 'Y')
+        {
+            conti = true;
+        }
+        else
+        {
+            conti = false;
+        }
+    }
 
     return 0;
 }
