@@ -1,8 +1,8 @@
 #include <iostream>
 using namespace std;
 
-int stack[100];      // Static array with a maximum size
-int n = 0, top = -1; // Stack size and top index
+int stack[100];      
+int n = 0, top = -1; 
 
 void createStack()
 {
