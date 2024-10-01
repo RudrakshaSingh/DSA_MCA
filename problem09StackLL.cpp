@@ -7,18 +7,8 @@ struct Node {
 };
 
 Node* head = nullptr;
-int maxSize;
 
-void createStack() {
-    cout << "Enter the size of the stack using Single LL (max 100): ";
-    cin >> maxSize;
-    if (maxSize > 100 || maxSize <= 0) {
-        cout << "Invalid size. Setting stack size to 100." << endl;
-        maxSize = 100;
-    }
-}
-
-int size() {
+int getSize() {
     int count = 0;
     Node* temp = head;
     while (temp != nullptr) {
@@ -29,10 +19,6 @@ int size() {
 }
 
 void push(int val) {
-    if (size() >= maxSize) {
-        cout << "Stack Overflow" << endl;
-        return;
-    }
     
     Node* newNode = (Node*)malloc(sizeof(Node));
     
@@ -65,14 +51,8 @@ bool isEmpty() {
     return head == nullptr;
 }
 
-bool isFull() {
-    return size() >= maxSize;
-}
-
 int main() {
     int ch, val;
-    cout << "Creating Stack :" << endl;
-    createStack();
     cout << "STACK CREATED" << endl;
     cout << endl;
 
@@ -84,8 +64,7 @@ int main() {
         cout << "(2) Pop from stack             ";
         cout << "(3) Peek at top element" << endl;
         cout << "(4) Check if stack is empty   ";
-        cout << "(5) Check if stack is full     ";
-        cout << "(6) Get stack size       " << endl;
+        cout << "(5) Get stack size"<<endl;
 
         cout << "Enter choice: ";
         cin >> ch;
@@ -109,10 +88,7 @@ int main() {
                 cout << (isEmpty() ? "Stack is empty." : "Stack is not empty.") << endl;
                 break;
             case 5:
-                cout << (isFull() ? "Stack is full." : "Stack is not full.") << endl;
-                break;
-            case 6:
-                cout << "Stack size: " << size() << endl;
+                cout << "Stack size: " << getSize() << endl;
                 break;
             default:
                 cout << "Invalid Choice" << endl;
