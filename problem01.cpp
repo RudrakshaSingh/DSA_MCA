@@ -128,7 +128,7 @@ int binarySearch(int arr[], int left, int right, int key)
 
 void insertionSort(int arr[], int n)
 {
-    for (int i = 1; i < n; i++)
+    for (int i = 1; i < n; i++)   //j is initialized to i - 1, which points to the last element of the sorted portion.
     {
         int key = arr[i];
         int j = i - 1;

@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
 struct Node {
@@ -16,14 +16,17 @@ Node* createNode(int val) {
     return newNode;
 }
 
+// Enqueue function for circular queue
 void Enqueue(int val) {
     Node* newNode = createNode(val);
     
-    if (rear == nullptr) { // Queue is empty
+    if (front == nullptr) { 
         front = rear = newNode;
+        rear->next = front; 
     } else {
         rear->next = newNode; 
         rear = newNode; 
+        rear->next = front; 
     }
     cout << val << " added to queue." << endl;
 }
@@ -35,16 +38,16 @@ void Dequeue() {
     }
     Node* temp = front; 
     cout << "Dequeued element is " << temp->data << endl;
-    front = front->next; 
 
-    if (front == nullptr) { // If queue is now empty
-        rear = nullptr; 
+    if (front == rear) { 
+        front = rear = nullptr; 
+    } else {
+        front = front->next; 
+        rear->next = front; 
     }
-
-    free(temp); // Free the dequeued node
+    free(temp); 
 }
 
-// Function to get the front element
 int getFront() {
     if (front == nullptr) {
         cout << "Queue is empty." << endl;
@@ -53,19 +56,18 @@ int getFront() {
     return front->data;
 }
 
-// Function to check if the queue is empty
 bool isEmpty() {
-    return (front == nullptr); // Queue is empty if front is nullptr
+    return (front == nullptr);
 }
 
-// Function to get the current size of the queue
 int CurrentSize() {
+    if (isEmpty()) return 0; 
     int size = 0;
     Node* temp = front;
-    while (temp) {
+    do {
         size++;
-        temp = temp->next; // Move to the next node
-    }
+        temp = temp->next; 
+    } while (temp != front); 
     return size;
 }
 
