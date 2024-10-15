@@ -1,11 +1,8 @@
-#include <iostream>
-#include <string>
-#include <cctype> // For isdigit
-#include <cmath>
+#include<bits/stdc++.h>
 using namespace std;
 
 const int MAX_SIZE = 100;
-char stack[MAX_SIZE];
+char Stack[MAX_SIZE];
 int top = -1;
 
 void push(char val)
@@ -17,7 +14,7 @@ void push(char val)
     else
     {
         top++;
-        stack[top] = val;
+        Stack[top] = val;
     }
 }
 
@@ -41,7 +38,7 @@ char peek()
     }
     else
     {
-        return stack[top];
+        return Stack[top];
     }
 }
 
@@ -109,6 +106,10 @@ double evaluatePostfix(const string &postfix)
 {
     for (char c : postfix)
     {
+        if (isalpha(c)) {
+            cout << "cannot evaluate postfix having characters" << endl;
+            return INT_MIN;
+        }
         if (isspace(c))
             continue;
 
@@ -119,9 +120,9 @@ double evaluatePostfix(const string &postfix)
         else
         {
             double operand2 = peek();
-            pop(); // Pop operand 2
+            pop();
             double operand1 = peek();
-            pop(); // Pop operand 1
+            pop();
             double result;
 
             switch (c)
@@ -167,9 +168,11 @@ int main()
     if (evaluate == 'y' || evaluate == 'Y')
     {
         top = -1;
-
         double result = evaluatePostfix(postfixResult);
+        if (result!=INT_MIN)
+        {
         cout << "Evaluation result: " << result << endl;
+        }
     }
 
     return 0;
