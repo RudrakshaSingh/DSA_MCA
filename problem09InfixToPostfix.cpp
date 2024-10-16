@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 const int MAX_SIZE = 100;
@@ -54,13 +54,19 @@ int prec(char c)
         return -1;
 }
 
-void infixToPostfix(string s, string &result)
+string infixToPostfix(string s)
 {
+    string result;
     for (int i = 0; i < s.length(); i++)
     {
         char c = s[i];
+        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == '(' || c == ')'))
+        {
+            cout << "Operator and Operand is not valid" << endl;
+            return "";
+        }
 
-        if (isalnum(c))
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
         {
             result += c;
         }
@@ -93,27 +99,22 @@ void infixToPostfix(string s, string &result)
         result += peek();
         pop();
     }
-
-    cout << "Postfix expression: ";
-    for (char c : result)
-    {
-        cout << c << ' ';
-    }
-    cout << endl;
+    return result;
 }
 
 double evaluatePostfix(const string &postfix)
 {
     for (char c : postfix)
     {
-        if (isalpha(c)) {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+        {
             cout << "cannot evaluate postfix having characters" << endl;
             return INT_MIN;
         }
-        if (isspace(c))
+        if (c == ' ')
             continue;
 
-        if (isdigit(c))
+        if (c >= '0' && c <= '9')
         {
             push(c - '0'); // Convert char to int and push
         }
@@ -154,26 +155,33 @@ double evaluatePostfix(const string &postfix)
 int main()
 {
     string expression;
-    string postfixResult;
 
     cout << "Enter infix expression: ";
     cin >> expression;
 
-    infixToPostfix(expression, postfixResult);
-
-    char evaluate;
-    cout << "Want to evaluate the postfix expression? (y/n): ";
-    cin >> evaluate;
-
-    if (evaluate == 'y' || evaluate == 'Y')
+    string postfixResult = infixToPostfix(expression);
+    if (!postfixResult.empty())
     {
-        top = -1;
-        double result = evaluatePostfix(postfixResult);
-        if (result!=INT_MIN)
+        cout << "Postfix expression: ";
+        for (char c : postfixResult)
         {
-        cout << "Evaluation result: " << result << endl;
+            cout << c << ' ';
+        }
+        cout << endl;
+
+        char evaluate;
+        cout << "Want to evaluate the postfix expression? (y/n): ";
+        cin >> evaluate;
+
+        if (evaluate == 'y' || evaluate == 'Y')
+        {
+            top = -1;
+            double result = evaluatePostfix(postfixResult);
+            if (result != INT_MIN)
+            {
+                cout << "Evaluation result: " << result << endl;
+            }
         }
     }
-
     return 0;
 }
