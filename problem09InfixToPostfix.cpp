@@ -34,7 +34,7 @@ char peek()
 {
     if (top <= -1)
     {
-        return '\0'; // Indicate empty stack
+        return '\0';
     }
     else
     {
@@ -54,17 +54,48 @@ int prec(char c)
         return -1;
 }
 
+bool isValidInfix(string s)
+{
+    int cnt = 0;
+
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (!((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') ||
+              (s[i] >= '0' && s[i] <= '9') || s[i] == '+' || s[i] == '-' ||
+              s[i] == '*' || s[i] == '/' || s[i] == '^' || s[i] == '(' || s[i] == ')'))
+        {
+            cout << "Invalid operator or operand: " << s[i] << endl;
+            return false;
+        }
+        else if (s[i] == '(')
+        {
+            cnt++;
+        }
+        else if (s[i] == ')')
+        {
+            cnt--;
+            if (cnt < 0)
+            {
+                cout << "Mismatched parentheses" << endl;
+                return false;
+            }
+        }
+    }
+    if (cnt != 0)
+    {
+        cout << "Mismatched parentheses" << endl;
+        return false;
+    }
+
+    return true;
+}
+
 string infixToPostfix(string s)
 {
     string result;
     for (int i = 0; i < s.length(); i++)
     {
         char c = s[i];
-        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == '(' || c == ')'))
-        {
-            cout << "Operator and Operand is not valid" << endl;
-            return "";
-        }
 
         if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
         {
@@ -102,7 +133,7 @@ string infixToPostfix(string s)
     return result;
 }
 
-double evaluatePostfix(const string &postfix)
+int evaluatePostfix(const string postfix)
 {
     for (char c : postfix)
     {
@@ -120,11 +151,11 @@ double evaluatePostfix(const string &postfix)
         }
         else
         {
-            double operand2 = peek();
+            int operand2 = peek();
             pop();
-            double operand1 = peek();
+            int operand1 = peek();
             pop();
-            double result;
+            int result;
 
             switch (c)
             {
@@ -159,29 +190,27 @@ int main()
     cout << "Enter infix expression: ";
     cin >> expression;
 
-    string postfixResult = infixToPostfix(expression);
-    if (!postfixResult.empty())
+    if (!isValidInfix(expression))
     {
-        cout << "Postfix expression: ";
-        for (char c : postfixResult)
-        {
-            cout << c << ' ';
-        }
-        cout << endl;
+        return 0;
+    }
 
-        char evaluate;
-        cout << "Want to evaluate the postfix expression? (y/n): ";
-        cin >> evaluate;
+    string postfixResult = infixToPostfix(expression);
+    cout << "Postfix expression: " << postfixResult << endl;
 
-        if (evaluate == 'y' || evaluate == 'Y')
+    char evaluate;
+    cout << "Want to evaluate the postfix expression? (y/n): ";
+    cin >> evaluate;
+
+    if (evaluate == 'y' || evaluate == 'Y')
+    {
+        top = -1;
+        int result = evaluatePostfix(postfixResult);
+        if (result != INT_MIN)
         {
-            top = -1;
-            double result = evaluatePostfix(postfixResult);
-            if (result != INT_MIN)
-            {
-                cout << "Evaluation result: " << result << endl;
-            }
+            cout << "Evaluation result: " << result << endl;
         }
     }
+
     return 0;
 }

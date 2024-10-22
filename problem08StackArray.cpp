@@ -97,7 +97,7 @@ int main()
         {
         case 1:
         {
-            cout << "Enter value to be pushed:";
+            cout << "Enter value to be pushed [0-9]:";
             cin >> val;
             push(val);
             break;
