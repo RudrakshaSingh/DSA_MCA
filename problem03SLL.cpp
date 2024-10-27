@@ -1,73 +1,63 @@
-// linkedlist
+//Singly Linked List
 #include <bits/stdc++.h>
+
 using namespace std;
 
-// structor of 1d linkedList
-struct Node
-{
+struct Node {
     int data;
-    Node *next;
+    Node * next;
 };
 
-Node *head = nullptr;
+Node * head = nullptr;
 
-void traverseList()
-{
+void traverseList() {
     cout << "---------------------------------" << endl;
-    if (head == nullptr)
-    {
+    if (head == nullptr) {
         cout << "The list is empty." << endl;
         return;
     }
-    Node *temp = head;
+    Node * temp = head;
     cout << "The linked list is: ";
-    while (temp != nullptr)
-    {
-        cout << temp->data << " ";
-        temp = temp->next;
+    while (temp != nullptr) {
+        cout << temp -> data << " ";
+        temp = temp -> next;
     }
     cout << endl;
     cout << "---------------------------------" << endl;
 }
 
-void insertAtBeginning()
-{
+void insertAtBeginning() {
     int value;
     cout << "Enter value to enter : ";
     cin >> value;
     cout << endl;
 
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = value;
-    newNode->next = head;
+    Node * newNode = (Node * ) malloc(sizeof(Node));
+    newNode -> data = value;
+    newNode -> next = head;
     head = newNode;
 
     cout << "Updated LinkedList :" << endl;
     traverseList();
 }
 
-void insertAtEnd(int value)
-{
-    Node *newNode = (Node *)malloc(sizeof(Node));
+void insertAtEnd(int value) {
+    Node * newNode = (Node * ) malloc(sizeof(Node));
 
-    newNode->data = value;
-    newNode->next = nullptr;
+    newNode -> data = value;
+    newNode -> next = nullptr;
 
     // list is empty
-    if (head == nullptr)
-    {
+    if (head == nullptr) {
         head = newNode;
-    }
-    else
-    {
+    } else {
         // Traverse to the end of the list
-        Node *temp = head;
-        while (temp->next != nullptr)
-        {
-            temp = temp->next;
+        Node * temp = head;
+        while (temp -> next != nullptr) {
+            temp = temp -> next;
         }
 
-        temp->next = newNode;
+        temp -> next = newNode;
     }
 }
 
@@ -80,16 +70,16 @@ void insertAfterGivenNode() {
     cout << endl;
 
     // Traverse the list to find the node with the value givenNode
-    Node *temp = head;
-    while (temp != nullptr && temp->data != givenNode) {
-        temp = temp->next;
+    Node * temp = head;
+    while (temp != nullptr && temp -> data != givenNode) {
+        temp = temp -> next;
     }
 
     if (temp != nullptr) {
-        Node *newNode = (Node *)malloc(sizeof(Node));
-        newNode->data = value;
-        newNode->next = temp->next;
-        temp->next = newNode;
+        Node * newNode = (Node * ) malloc(sizeof(Node));
+        newNode -> data = value;
+        newNode -> next = temp -> next;
+        temp -> next = newNode;
 
         cout << "Node with value " << value << " has been inserted after node with value " << givenNode << "." << endl;
     } else {
@@ -99,44 +89,39 @@ void insertAfterGivenNode() {
     traverseList();
 }
 
-void deleteAtBeginning()
-{
+void deleteAtBeginning() {
     if (head == nullptr) {
         cout << "The list is empty, nothing to delete." << endl;
         return;
     }
 
-    Node *temp = head;
-    head = head->next;
+    Node * temp = head;
+    head = head -> next;
     free(temp);
     traverseList();
 }
 
-void deleteAtEnd()
-{
-    if (head == nullptr)
-    {
+void deleteAtEnd() {
+    if (head == nullptr) {
         cout << "The list is empty, nothing to delete." << endl;
         return;
     }
 
     // Check if there is only one node
-    if (head->next == nullptr)
-    {
-        free(head);    
-        head = nullptr; 
+    if (head -> next == nullptr) {
+        free(head);
+        head = nullptr;
         cout << "The only node in the list has been deleted." << endl;
         traverseList();
         return;
     }
 
-    Node *temp = head;
-    while (temp->next->next != nullptr)
-    {
-        temp = temp->next;
+    Node * temp = head;
+    while (temp -> next -> next != nullptr) {
+        temp = temp -> next;
     }
-    free(temp->next);
-    temp->next = nullptr;
+    free(temp -> next);
+    temp -> next = nullptr;
 
     traverseList();
 }
@@ -153,9 +138,9 @@ void deleteTheGivenNode() {
     }
 
     // node to be deleted is head 
-    if (head->data == givenNode) {
-        Node *temp = head;
-        head = head->next;
+    if (head -> data == givenNode) {
+        Node * temp = head;
+        head = head -> next;
         free(temp);
         cout << "Node with value " << givenNode << " has been deleted." << endl;
         traverseList();
@@ -163,11 +148,11 @@ void deleteTheGivenNode() {
     }
 
     // Traverse the list to find the node to delete
-    Node *current = head;
-    Node *previous = nullptr;
-    while (current != nullptr && current->data != givenNode) {
+    Node * current = head;
+    Node * previous = nullptr;
+    while (current != nullptr && current -> data != givenNode) {
         previous = current;
-        current = current->next;
+        current = current -> next;
     }
 
     // If the node was not found
@@ -177,36 +162,32 @@ void deleteTheGivenNode() {
     }
 
     // Node found,  deletion
-    previous->next = current->next;
+    previous -> next = current -> next;
     free(current);
 
     cout << "Node with value " << givenNode << " has been deleted." << endl;
     traverseList();
 }
 
-void count()
-{
-    Node *temp = head;
+void count() {
+    Node * temp = head;
     int count = 0;
 
-    while (temp != nullptr)
-    {
+    while (temp != nullptr) {
         count++;
-        temp = temp->next;
+        temp = temp -> next;
     }
     cout << "There are " << count << " nodes in the list." << endl;
 }
 
-void reverseSingleLL()
-{
-    Node *current = head;
-    Node *prev = nullptr;
-    Node *next = nullptr;
+void reverseSingleLL() {
+    Node * current = head;
+    Node * prev = nullptr;
+    Node * next = nullptr;
 
-    while (current != nullptr)
-    {
-        next = current->next;
-        current->next = prev;
+    while (current != nullptr) {
+        next = current -> next;
+        current -> next = prev;
         prev = current;
         current = next;
     }
@@ -216,15 +197,13 @@ void reverseSingleLL()
     traverseList();
 }
 
-int main()
-{
+int main() {
     bool Continue = true;
     int n;
     cout << "Enter the number of elements you want to add to the linked list: ";
     cin >> n;
 
-    for (int i = 0; i < n; ++i)
-    {
+    for (int i = 0; i < n; ++i) {
         int value;
         cout << "Enter data for node " << i + 1 << ": ";
         cin >> value;
@@ -232,13 +211,11 @@ int main()
     }
     traverseList();
 
-    while (Continue)
-    {
+    while (Continue) {
         char Char;
         cout << "Do you want to continue (y/n)" << endl;
         cin >> Char;
-        if (Char != 'y' && Char != 'Y')
-        {
+        if (Char != 'y' && Char != 'Y') {
             Continue = false;
             cout << "Exiting program." << endl;
             break;
@@ -260,8 +237,7 @@ int main()
         int choice, value;
         cin >> choice;
 
-        switch (choice)
-        {
+        switch (choice) {
         case 1:
             traverseList();
             break;
@@ -298,6 +274,5 @@ int main()
             break;
         }
     }
-
     return 0;
 }

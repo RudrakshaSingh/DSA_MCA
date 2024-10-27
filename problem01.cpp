@@ -1,17 +1,14 @@
 #include <iostream>
 using namespace std;
 
-void traverse(int arr[], int n)
-{
+void traverse(int arr[], int n){
     for (int i = 0; i < n; i++)
         cout << arr[i] << " ";
     cout << endl;
 }
 
-void insertAtBeginning(int arr[], int &n, int value, int capacity)
-{
-    if (n >= capacity)
-    {
+void insertAtBeginning(int arr[], int &n, int value, int capacity){
+    if (n >= capacity){
         cout << "Array is full." << endl;
         return;
     }
@@ -24,10 +21,8 @@ void insertAtBeginning(int arr[], int &n, int value, int capacity)
     traverse(arr, n);
 }
 
-void insertAtEnd(int arr[], int &n, int value, int capacity)
-{
-    if (n >= capacity)
-    {
+void insertAtEnd(int arr[], int &n, int value, int capacity){
+    if (n >= capacity){
         cout << "Array is full." << endl;
         return;
     }
@@ -38,15 +33,12 @@ void insertAtEnd(int arr[], int &n, int value, int capacity)
     traverse(arr, n);
 }
 
-void insertAtPosition(int arr[], int &n, int value, int position, int capacity)
-{
-    if (position < 0 || position > n)
-    {
+void insertAtPosition(int arr[], int &n, int value, int position, int capacity){
+    if (position < 0 || position > n){
         cout << "Invalid position." << endl;
         return;
     }
-    if (n >= capacity)
-    {
+    if (n >= capacity){
         cout << "Array is full." << endl;
         return;
     }
@@ -59,10 +51,8 @@ void insertAtPosition(int arr[], int &n, int value, int position, int capacity)
     traverse(arr, n);
 }
 
-void deleteFromBeginning(int arr[], int &n)
-{
-    if (n <= 0)
-    {
+void deleteFromBeginning(int arr[], int &n){
+    if (n <= 0){
         cout << "Array is empty." << endl;
         return;
     }
@@ -74,10 +64,8 @@ void deleteFromBeginning(int arr[], int &n)
     traverse(arr, n);
 }
 
-void deleteFromEnd(int arr[], int &n)
-{
-    if (n <= 0)
-    {
+void deleteFromEnd(int arr[], int &n){
+    if (n <= 0){
         cout << "Array is empty." << endl;
         return;
     }
@@ -87,10 +75,8 @@ void deleteFromEnd(int arr[], int &n)
     traverse(arr, n);
 }
 
-void deleteFromPosition(int arr[], int &n, int position)
-{
-    if (position < 0 || position >= n)
-    {
+void deleteFromPosition(int arr[], int &n, int position){
+    if (position < 0 || position >= n){
         cout << "Invalid position." << endl;
         return;
     }
@@ -102,20 +88,16 @@ void deleteFromPosition(int arr[], int &n, int position)
     traverse(arr, n);
 }
 
-int linearSearch(int arr[], int n, int key)
-{
-    for (int i = 0; i < n; i++)
-    {
+int linearSearch(int arr[], int n, int key){
+    for (int i = 0; i < n; i++){
         if (arr[i] == key)
             return i;
     }
     return -1;
 }
 
-int binarySearch(int arr[], int left, int right, int key)
-{
-    if (right >= left)
-    {
+int binarySearch(int arr[], int left, int right, int key){
+    if (right >= left){
         int mid = left + (right - left) / 2;
         if (arr[mid] == key)
             return mid;
@@ -126,14 +108,12 @@ int binarySearch(int arr[], int left, int right, int key)
     return -1;
 }
 
-void insertionSort(int arr[], int n)
-{
+void insertionSort(int arr[], int n){
     for (int i = 1; i < n; i++)   //j is initialized to i - 1, which points to the last element of the sorted portion.
     {
         int key = arr[i];
         int j = i - 1;
-        while (j >= 0 && arr[j] > key)
-        {
+        while (j >= 0 && arr[j] > key){
             arr[j + 1] = arr[j];
             j--;
         }
@@ -141,8 +121,7 @@ void insertionSort(int arr[], int n)
     }
 }
 
-int main()
-{
+int main(){
      int capacity = 100; // Set the maximum capacity of the array
     int arr[capacity];
     int n = 0; // Initialize the size of the array to 0
@@ -165,8 +144,7 @@ int main()
 
     bool continueProgram = true;
 
-    while (continueProgram)
-    {
+    while (continueProgram){
         cout << "\nMenu:\n";
         cout << "1. Traverse Array\n";
         cout << "2. Insert at Beginning\n";
@@ -182,8 +160,7 @@ int main()
         int choice, value, position;
         cin >> choice;
 
-        switch (choice)
-        {
+        switch (choice){
         case 1:
             traverse(arr, n);
             break;
@@ -245,8 +222,7 @@ int main()
         char cont;
         cout << "\nDo you want to continue? (y/n): ";
         cin >> cont;
-        if (cont != 'y' && cont != 'Y')
-        {
+        if (cont != 'y' && cont != 'Y'){
             continueProgram = false;
             cout << "Exiting program." << endl;
         }

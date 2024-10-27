@@ -1,66 +1,57 @@
 // circularSingleLinkedList
-
-// linkedlist
 #include <bits/stdc++.h>
+
 using namespace std;
 
-// structor of 1d linkedList
-struct Node
-{
+struct Node {
     int data;
-    Node *next;
+    Node * next;
 };
 
-Node *head = nullptr;
+Node * head = nullptr;
 
-void traverseList()
-{
+void traverseList() {
     cout << "---------------------------------" << endl;
-    if (head == nullptr)
-    {
+    if (head == nullptr) {
         cout << "The list is empty." << endl;
         return;
     }
 
-    Node *temp = head;
+    Node * temp = head;
     cout << "The circular singly linked list is: ";
-    while (temp->next != head)
-    {
-        cout << temp->data << " ";
-        temp = temp->next;
+    while (temp -> next != head) {
+        cout << temp -> data << " ";
+        temp = temp -> next;
     }
-    cout << temp->data << endl;
+    cout << temp -> data << endl;
     cout << endl;
     cout << "---------------------------------" << endl;
 }
 
-void insertAtBeginning()
-{
+void insertAtBeginning() {
     int value;
     cout << "Enter value to enter : ";
     cin >> value;
     cout << endl;
 
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = value;
-    if (head == nullptr)
-    {
+    Node * newNode = (Node * ) malloc(sizeof(Node));
+    newNode -> data = value;
+    if (head == nullptr) {
         head = newNode;
-        head->next = head;
+        head -> next = head;
 
         cout << "Updated LinkedList :" << endl;
         traverseList();
         return;
     }
 
-    newNode->next = head;
+    newNode -> next = head;
 
-    Node *temp = head;
-    while (temp->next != head)
-    {
-        temp = temp->next;
+    Node * temp = head;
+    while (temp -> next != head) {
+        temp = temp -> next;
     }
-    temp->next = newNode;
+    temp -> next = newNode;
     head = newNode;
 
     cout << "Updated LinkedList :" << endl;
@@ -68,29 +59,25 @@ void insertAtBeginning()
     return;
 }
 
-void insertAtEnd(int value)
-{
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = value;
+void insertAtEnd(int value) {
+    Node * newNode = (Node * ) malloc(sizeof(Node));
+    newNode -> data = value;
 
-    if (head == nullptr)
-    {
+    if (head == nullptr) {
         head = newNode;
-        head->next = head;
+        head -> next = head;
         return;
     }
-    Node *temp = head;
-    while (temp->next != head)
-    {
-        temp = temp->next;
+    Node * temp = head;
+    while (temp -> next != head) {
+        temp = temp -> next;
     }
-    temp->next = newNode;
-    newNode->next = head;
+    temp -> next = newNode;
+    newNode -> next = head;
     return;
 }
 
-void insertAfterGivenNode()
-{
+void insertAfterGivenNode() {
     int value, givenNode;
     cout << "Enter value to insert: ";
     cin >> value;
@@ -98,29 +85,23 @@ void insertAfterGivenNode()
     cin >> givenNode;
     cout << endl;
 
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = value;
-    if (head == nullptr)
-    {
-        newNode->next = newNode;
+    Node * newNode = (Node * ) malloc(sizeof(Node));
+    newNode -> data = value;
+    if (head == nullptr) {
+        newNode -> next = newNode;
         head = newNode;
         cout << "list is empty so cannot add after a node .so we are inserting at begining" << endl;
-    }
-    else
-    {
-        Node *temp = head;
-        while (true)
-        {
-            if (temp->data == givenNode)
-            {
-                newNode->next = temp->next;
-                temp->next = newNode;
+    } else {
+        Node * temp = head;
+        while (true) {
+            if (temp -> data == givenNode) {
+                newNode -> next = temp -> next;
+                temp -> next = newNode;
                 break;
             }
 
-            temp = temp->next;
-            if (temp == head)
-            {
+            temp = temp -> next;
+            if (temp == head) {
                 cout << "cannot find the given node" << endl;
                 break;
             }
@@ -130,109 +111,89 @@ void insertAfterGivenNode()
     traverseList();
 }
 
-void deleteAtBeginning()
-{
-    if (head == NULL)
-    {
-        cout << "List is empty. Nothing to delete.\n"
-             << endl;
+void deleteAtBeginning() {
+    if (head == NULL) {
+        cout << "List is empty. Nothing to delete.\n" <<
+            endl;
         return;
     }
-    if (head->next == head)
-    {
+    if (head -> next == head) {
         free(head);
         head = NULL;
         cout << "Node deleted. List is now empty." << endl;
         return;
     }
 
-    Node *temp = head;
-    Node *last = head;
-    while (last->next != head)
-    {
-        last = last->next;
+    Node * temp = head;
+    Node * last = head;
+    while (last -> next != head) {
+        last = last -> next;
     }
-    last->next = head->next;
+    last -> next = head -> next;
 
-    head = head->next;
+    head = head -> next;
     free(temp);
 
     traverseList();
 }
 
-void deleteAtEnd()
-{
-    if (head == NULL)
-    {
+void deleteAtEnd() {
+    if (head == NULL) {
         cout << "List is empty. Nothing to delete." << endl;
         return;
     }
-    if (head->next == head)
-    {
+    if (head -> next == head) {
         free(head);
         head = NULL;
         cout << "Node deleted. List is now empty." << endl;
         return;
     }
 
-    Node *sLast = head;
-    while (sLast->next->next != head)
-    {
-        sLast = sLast->next;
+    Node * sLast = head;
+    while (sLast -> next -> next != head) {
+        sLast = sLast -> next;
     }
-    Node *last = sLast->next;
-    sLast->next = head;
+    Node * last = sLast -> next;
+    sLast -> next = head;
     free(last);
 
     traverseList();
 }
 
-void deleteTheGivenNode()
-{
+void deleteTheGivenNode() {
     int givenNode;
     cout << "give the value of node you want to delete" << endl;
     cin >> givenNode;
 
-    if (head == NULL)
-    {
+    if (head == NULL) {
         cout << "List is empty. Nothing to delete." << endl;
         return;
     }
-    if (head->next == head)
-    {
-        if (head->data == givenNode)
-        {
+    if (head -> next == head) {
+        if (head -> data == givenNode) {
             free(head);
             head = NULL;
             cout << "Element deleted. List is now empty." << endl;
-        }
-        else
-        {
+        } else {
             cout << "Node with value " << givenNode << " not found." << endl;
         }
         traverseList();
         return;
     }
 
-    Node *temp = head;
-    Node *prev = nullptr;
-    while (true)
-    {
-        if (temp->data == givenNode)
-        {
-            if (prev == NULL)
-            { // Deleting the head node
-                Node *last = head;
-                while (last->next != head)
-                {
-                    last = last->next;
+    Node * temp = head;
+    Node * prev = nullptr;
+    while (true) {
+        if (temp -> data == givenNode) {
+            if (prev == NULL) { // Deleting the head node
+                Node * last = head;
+                while (last -> next != head) {
+                    last = last -> next;
                 }
-                head = head->next;
-                last->next = head;
-            }
-            else
-            {
-                prev->next = temp->next;
+                head = head -> next;
+                last -> next = head;
+            } else {
+                prev -> next = temp -> next;
             }
             free(temp);
             cout << "Node deleted." << endl;
@@ -242,26 +203,23 @@ void deleteTheGivenNode()
 
         // Move to the next node
         prev = temp;
-        temp = temp->next;
+        temp = temp -> next;
 
         // If we've looped back to the head, the node wasn't found
-        if (temp == head)
-        {
+        if (temp == head) {
             cout << "Node with value " << givenNode << " not found." << endl;
             break;
         }
     }
 }
 
-int main()
-{
+int main() {
     bool Continue = true;
     int n;
     cout << "Enter the number of elements you want to add to the circular singly linked list: ";
     cin >> n;
 
-    for (int i = 0; i < n; ++i)
-    {
+    for (int i = 0; i < n; ++i) {
         int value;
         cout << "Enter data for node " << i + 1 << ": ";
         cin >> value;
@@ -269,13 +227,11 @@ int main()
     }
     traverseList();
 
-    while (Continue)
-    {
+    while (Continue) {
         char Char;
         cout << "Do you want to continue (y/n)" << endl;
         cin >> Char;
-        if (Char != 'y' && Char != 'Y')
-        {
+        if (Char != 'y' && Char != 'Y') {
             Continue = false;
             cout << "Exiting program." << endl;
             break;
@@ -295,8 +251,7 @@ int main()
         int choice, value;
         cin >> choice;
 
-        switch (choice)
-        {
+        switch (choice) {
         case 1:
             traverseList();
             break;

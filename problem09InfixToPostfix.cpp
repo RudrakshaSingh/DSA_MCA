@@ -1,49 +1,37 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
 const int MAX_SIZE = 100;
 char Stack[MAX_SIZE];
 int top = -1;
 
-void push(char val)
-{
-    if (top >= MAX_SIZE - 1)
-    {
+void push(char val) {
+    if (top >= MAX_SIZE - 1) {
         cout << "Stack overflow\n";
-    }
-    else
-    {
+    } else {
         top++;
         Stack[top] = val;
     }
 }
 
-void pop()
-{
-    if (top <= -1)
-    {
+void pop() {
+    if (top <= -1) {
         cout << "Stack underflow\n";
-    }
-    else
-    {
+    } else {
         top--;
     }
 }
 
-char peek()
-{
-    if (top <= -1)
-    {
+char peek() {
+    if (top <= -1) {
         return '\0';
-    }
-    else
-    {
+    } else {
         return Stack[top];
     }
 }
 
-int prec(char c)
-{
+int prec(char c) {
     if (c == '^')
         return 3;
     else if (c == '/' || c == '*')
@@ -54,35 +42,26 @@ int prec(char c)
         return -1;
 }
 
-bool isValidInfix(string s)
-{
+bool isValidInfix(string s) {
     int cnt = 0;
 
-    for (int i = 0; i < s.length(); i++)
-    {
+    for (int i = 0; i < s.length(); i++) {
         if (!((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') ||
-              (s[i] >= '0' && s[i] <= '9') || s[i] == '+' || s[i] == '-' ||
-              s[i] == '*' || s[i] == '/' || s[i] == '^' || s[i] == '(' || s[i] == ')'))
-        {
+                (s[i] >= '0' && s[i] <= '9') || s[i] == '+' || s[i] == '-' ||
+                s[i] == '*' || s[i] == '/' || s[i] == '^' || s[i] == '(' || s[i] == ')')) {
             cout << "Invalid operator or operand: " << s[i] << endl;
             return false;
-        }
-        else if (s[i] == '(')
-        {
+        } else if (s[i] == '(') {
             cnt++;
-        }
-        else if (s[i] == ')')
-        {
+        } else if (s[i] == ')') {
             cnt--;
-            if (cnt < 0)
-            {
+            if (cnt < 0) {
                 cout << "Mismatched parentheses" << endl;
                 return false;
             }
         }
     }
-    if (cnt != 0)
-    {
+    if (cnt != 0) {
         cout << "Mismatched parentheses" << endl;
         return false;
     }
@@ -90,34 +69,23 @@ bool isValidInfix(string s)
     return true;
 }
 
-string infixToPostfix(string s)
-{
+string infixToPostfix(string s) {
     string result;
-    for (int i = 0; i < s.length(); i++)
-    {
+    for (int i = 0; i < s.length(); i++) {
         char c = s[i];
 
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
-        {
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
             result += c;
-        }
-        else if (c == '(')
-        {
+        } else if (c == '(') {
             push(c);
-        }
-        else if (c == ')')
-        {
-            while (peek() != '\0' && peek() != '(')
-            {
+        } else if (c == ')') {
+            while (peek() != '\0' && peek() != '(') {
                 result += peek();
                 pop();
             }
             pop(); // Remove '(' from the stack
-        }
-        else
-        {
-            while (top >= 0 && prec(c) <= prec(peek()))
-            {
+        } else {
+            while (top >= 0 && prec(c) <= prec(peek())) {
                 result += peek();
                 pop();
             }
@@ -125,40 +93,32 @@ string infixToPostfix(string s)
         }
     }
 
-    while (top >= 0)
-    {
+    while (top >= 0) {
         result += peek();
         pop();
     }
     return result;
 }
 
-int evaluatePostfix(const string postfix)
-{
-    for (char c : postfix)
-    {
-        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
-        {
+int evaluatePostfix(const string postfix) {
+    for (char c: postfix) {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
             cout << "cannot evaluate postfix having characters" << endl;
             return INT_MIN;
         }
         if (c == ' ')
             continue;
 
-        if (c >= '0' && c <= '9')
-        {
+        if (c >= '0' && c <= '9') {
             push(c - '0'); // Convert char to int and push
-        }
-        else
-        {
+        } else {
             int operand2 = peek();
             pop();
             int operand1 = peek();
             pop();
             int result;
 
-            switch (c)
-            {
+            switch (c) {
             case '+':
                 result = operand1 + operand2;
                 break;
@@ -183,15 +143,13 @@ int evaluatePostfix(const string postfix)
     return peek(); // The final result is the top of the evaluation stack
 }
 
-int main()
-{
+int main() {
     string expression;
 
     cout << "Enter infix expression: ";
     cin >> expression;
 
-    if (!isValidInfix(expression))
-    {
+    if (!isValidInfix(expression)) {
         return 0;
     }
 
@@ -202,12 +160,10 @@ int main()
     cout << "Want to evaluate the postfix expression? (y/n): ";
     cin >> evaluate;
 
-    if (evaluate == 'y' || evaluate == 'Y')
-    {
+    if (evaluate == 'y' || evaluate == 'Y') {
         top = -1;
         int result = evaluatePostfix(postfixResult);
-        if (result != INT_MIN)
-        {
+        if (result != INT_MIN) {
             cout << "Evaluation result: " << result << endl;
         }
     }

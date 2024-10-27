@@ -1,60 +1,50 @@
 // doublyLinkedList
-
-// linkedlist
 #include <bits/stdc++.h>
+
 using namespace std;
 
-// structor of 1d linkedList
-struct Node
-{
+struct Node {
     int data;
-    Node *next;
-    Node *back;
+    Node * next;
+    Node * back;
 };
 
-Node *head = nullptr;
+Node * head = nullptr;
 
-void traverseList()
-{
+void traverseList() {
     cout << "---------------------------------" << endl;
-    if (head == nullptr)
-    {
+    if (head == nullptr) {
         cout << "The list is empty." << endl;
         return;
     }
 
-    Node *temp = head;
+    Node * temp = head;
     cout << "The doubly linked list is: ";
-    while (temp->next != nullptr)
-    {
-        cout << temp->data << " ";
-        temp = temp->next;
+    while (temp -> next != nullptr) {
+        cout << temp -> data << " ";
+        temp = temp -> next;
     }
-    cout << temp->data << endl;
+    cout << temp -> data << endl;
     cout << endl;
     cout << "---------------------------------" << endl;
 }
 
-void insertAtBeginning()
-{
+void insertAtBeginning() {
     int value;
     cout << "Enter value to enter : ";
     cin >> value;
     cout << endl;
 
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = value;
-    newNode->back = nullptr;
+    Node * newNode = (Node * ) malloc(sizeof(Node));
+    newNode -> data = value;
+    newNode -> back = nullptr;
 
-    if (head == nullptr)
-    {
+    if (head == nullptr) {
         head = newNode;
-        head->next = nullptr;
-    }
-    else
-    {
-        newNode->next = head;
-        head->back = newNode;
+        head -> next = nullptr;
+    } else {
+        newNode -> next = head;
+        head -> back = newNode;
         head = newNode;
     }
     cout << "Updated LinkedList :" << endl;
@@ -62,31 +52,27 @@ void insertAtBeginning()
     return;
 }
 
-void insertAtEnd(int value)
-{
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = value;
-    newNode->next = nullptr;
+void insertAtEnd(int value) {
+    Node * newNode = (Node * ) malloc(sizeof(Node));
+    newNode -> data = value;
+    newNode -> next = nullptr;
 
-    if (head == nullptr)
-    {
+    if (head == nullptr) {
         head = newNode;
-        head->back = nullptr;
+        head -> back = nullptr;
         return;
     }
 
-    Node *temp = head;
-    while (temp->next != nullptr)
-    {
-        temp = temp->next;
+    Node * temp = head;
+    while (temp -> next != nullptr) {
+        temp = temp -> next;
     }
-    temp->next = newNode;
-    newNode->back = temp;
+    temp -> next = newNode;
+    newNode -> back = temp;
     return;
 }
 
-void insertAfterGivenNode()
-{
+void insertAfterGivenNode() {
     int value, givenNode;
     cout << "Enter value to insert: ";
     cin >> value;
@@ -94,40 +80,33 @@ void insertAfterGivenNode()
     cin >> givenNode;
     cout << endl;
 
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = value;
+    Node * newNode = (Node * ) malloc(sizeof(Node));
+    newNode -> data = value;
 
-    if (head == nullptr)
-    {
-        newNode->next = nullptr;
-        newNode->back = nullptr;
+    if (head == nullptr) {
+        newNode -> next = nullptr;
+        newNode -> back = nullptr;
         head = newNode;
         cout << "list is empty so cannot add after a node .so we are inserting at begining" << endl;
-    }
-    else
-    {
-        Node *temp = head;
+    } else {
+        Node * temp = head;
         bool found = false;
 
-        while (temp != nullptr)
-        {
-            if (temp->data == givenNode)
-            {
-                newNode->next = temp->next;
-                newNode->back = temp;
-                if (temp->next != nullptr)
-                {
-                    temp->next->back = newNode;
+        while (temp != nullptr) {
+            if (temp -> data == givenNode) {
+                newNode -> next = temp -> next;
+                newNode -> back = temp;
+                if (temp -> next != nullptr) {
+                    temp -> next -> back = newNode;
                 }
-                temp->next = newNode;
+                temp -> next = newNode;
                 found = true;
                 break;
             }
 
-            temp = temp->next;
+            temp = temp -> next;
         }
-        if (!found)
-        {
+        if (!found) {
             cout << "Node with value " << givenNode << " not found." << endl;
             return;
         }
@@ -138,104 +117,85 @@ void insertAfterGivenNode()
     return;
 }
 
-void deleteAtBeginning()
-{
-    if (head == nullptr)
-    {
+void deleteAtBeginning() {
+    if (head == nullptr) {
         cout << "List is empty. Nothing to delete." << endl;
         return;
     }
-    if (head->next == nullptr)
-    {
+    if (head -> next == nullptr) {
         free(head);
         head = nullptr;
         cout << "Node deleted. List is now empty." << endl;
-    }
-    else
-    {
-        Node *temp = head;
-        head = head->next;
+    } else {
+        Node * temp = head;
+        head = head -> next;
         free(temp);
-        head->back = nullptr;
+        head -> back = nullptr;
     }
     cout << "Updated LinkedList :" << endl;
     traverseList();
     return;
 }
 
-void deleteAtEnd()
-{
-    if (head == nullptr)
-    {
+void deleteAtEnd() {
+    if (head == nullptr) {
         cout << "List is empty. Nothing to delete." << endl;
         return;
     }
-    Node *temp = head;
-    while (temp->next!= nullptr)
-    {
-        temp = temp->next;
+    Node * temp = head;
+    while (temp -> next != nullptr) {
+        temp = temp -> next;
     }
-    if (temp==head)
-    {
+    if (temp == head) {
         free(temp);
         head = nullptr;
         cout << "Node deleted. List is now empty." << endl;
         return;
     }
 
-    temp->back->next = nullptr;
+    temp -> back -> next = nullptr;
     free(temp);
-    
 
     cout << "Updated LinkedList :" << endl;
     traverseList();
 }
 
-void deleteTheGivenNode()
-{
+void deleteTheGivenNode() {
     int givenNode;
     cout << "give the value of node you want to delete" << endl;
     cin >> givenNode;
 
-    if (head == nullptr)
-    {
+    if (head == nullptr) {
         cout << "List is empty. Nothing to delete." << endl;
         return;
     }
 
-    Node *temp = head;
+    Node * temp = head;
     bool found = false;
-    while (temp != nullptr)
-    {
-        if (temp->data == givenNode)
-        {
-            if (temp == head)
-            {
-                head = temp->next;
-                if (head != nullptr)
-                {
-                    head->back = nullptr;
+    while (temp != nullptr) {
+        if (temp -> data == givenNode) {
+            if (temp == head) {
+                head = temp -> next;
+                if (head != nullptr) {
+                    head -> back = nullptr;
                 }
                 free(temp);
                 found = true;
                 break;
             } //Node is in the middle or end
-            else
-            {
-                temp->back->next = temp->next; 
-                if (temp->next != nullptr) 
-                {
-                    temp->next->back = temp->back;
+            else {
+                temp -> back -> next = temp -> next;
+                if (temp -> next != nullptr) {
+                    temp -> next -> back = temp -> back;
                 }
                 free(temp);
                 found = true;
                 break;
             }
         }
-        temp = temp->next;
+        temp = temp -> next;
     }
-    if (!found)
-    {
+    if (!found) {
         cout << "Node with value " << givenNode << " not found." << endl;
         return;
     }
@@ -244,15 +204,13 @@ void deleteTheGivenNode()
     traverseList();
 }
 
-int main()
-{
+int main() {
     bool Continue = true;
     int n;
     cout << "Enter the number of elements you want to add to the doubly linked list: ";
     cin >> n;
 
-    for (int i = 0; i < n; ++i)
-    {
+    for (int i = 0; i < n; ++i) {
         int value;
         cout << "Enter data for node " << i + 1 << ": ";
         cin >> value;
@@ -260,13 +218,11 @@ int main()
     }
     traverseList();
 
-    while (Continue)
-    {
+    while (Continue) {
         char Char;
         cout << "Do you want to continue (y/n)" << endl;
         cin >> Char;
-        if (Char != 'y' && Char != 'Y')
-        {
+        if (Char != 'y' && Char != 'Y') {
             Continue = false;
             cout << "Exiting program." << endl;
             break;
@@ -286,8 +242,7 @@ int main()
         int choice, value;
         cin >> choice;
 
-        switch (choice)
-        {
+        switch (choice) {
         case 1:
             traverseList();
             break;

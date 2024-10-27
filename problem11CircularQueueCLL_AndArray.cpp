@@ -1,88 +1,73 @@
 #include <iostream>
+
 using namespace std;
 
-struct Node
-{
+struct Node {
     int data;
-    Node *next;
+    Node * next;
 };
 
-Node *front = nullptr;
-Node *rear = nullptr;
+Node * front = nullptr;
+Node * rear = nullptr;
 
-Node *createNode(int val)
-{
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = val;
-    newNode->next = nullptr;
+Node * createNode(int val) {
+    Node * newNode = (Node * ) malloc(sizeof(Node));
+    newNode -> data = val;
+    newNode -> next = nullptr;
     return newNode;
 }
 
-void EnqueueLL(int val)
-{
-    Node *newNode = createNode(val);
+void EnqueueLL(int val) {
+    Node * newNode = createNode(val);
 
-    if (front == nullptr)
-    {
+    if (front == nullptr) {
         front = rear = newNode;
-        rear->next = front;
-    }
-    else
-    {
-        rear->next = newNode;
+        rear -> next = front;
+    } else {
+        rear -> next = newNode;
         rear = newNode;
-        rear->next = front;
+        rear -> next = front;
     }
     cout << val << " added to queue." << endl;
 }
 
-void DequeueLL()
-{
-    if (front == nullptr)
-    {
+void DequeueLL() {
+    if (front == nullptr) {
         cout << "Queue Underflow" << endl;
         return;
     }
-    Node *temp = front;
-    cout << "Dequeued element is " << temp->data << endl;
+    Node * temp = front;
+    cout << "Dequeued element is " << temp -> data << endl;
 
-    if (front == rear)
-    {
+    if (front == rear) {
         front = rear = nullptr;
-    }
-    else
-    {
-        front = front->next;
-        rear->next = front;
+    } else {
+        front = front -> next;
+        rear -> next = front;
     }
     free(temp);
 }
 
-int getFrontLL()
-{
-    if (front == nullptr)
-    {
+int getFrontLL() {
+    if (front == nullptr) {
         cout << "Queue is empty." << endl;
         return -1;
     }
-    return front->data;
+    return front -> data;
 }
 
-bool isEmptyLL()
-{
+bool isEmptyLL() {
     return (front == nullptr);
 }
 
-int CurrentSizeLL()
-{
+int CurrentSizeLL() {
     if (isEmptyLL())
         return 0;
     int size = 0;
-    Node *temp = front;
-    do
-    {
+    Node * temp = front;
+    do {
         size++;
-        temp = temp->next;
+        temp = temp -> next;
     } while (temp != front);
     return size;
 }
@@ -90,28 +75,21 @@ int CurrentSizeLL()
 int queue[100];
 int maxSize, frontA, rearA;
 
-void createQueue()
-{
+void createQueue() {
     cout << "Enter the size of the Queue (max 100): ";
     cin >> maxSize;
-    if (maxSize > 100 || maxSize <= 0)
-    {
+    if (maxSize > 100 || maxSize <= 0) {
         cout << "Invalid size. Setting queue size to 100." << endl;
         maxSize = 100;
     }
     frontA = rearA = -1;
 }
 
-void Enqueue(int val)
-{
-    if ((rearA + 1) % maxSize == frontA)
-    {
+void Enqueue(int val) {
+    if ((rearA + 1) % maxSize == frontA) {
         cout << "Queue Overflow" << endl;
-    }
-    else
-    {
-        if (frontA == -1)
-        { // If the queue is empty
+    } else {
+        if (frontA == -1) { // If the queue is empty
             frontA = 0;
         }
         rearA = (rearA + 1) % maxSize;
@@ -120,68 +98,51 @@ void Enqueue(int val)
     }
 }
 
-void Dequeue()
-{
-    if (frontA == -1)
-    {
+void Dequeue() {
+    if (frontA == -1) {
         cout << "Queue Underflow" << endl;
-    }
-    else
-    {
+    } else {
         cout << "Dequeued element is " << queue[frontA] << endl;
-        if (frontA == rearA)
-        { // If the queue becomes empty
+        if (frontA == rearA) { // If the queue becomes empty
             frontA = rearA = -1;
-        }
-        else
-        {
+        } else {
             frontA = (frontA + 1) % maxSize;
         }
     }
 }
 
-int getFront()
-{
-    if (frontA == -1)
-    {
+int getFront() {
+    if (frontA == -1) {
         cout << "Queue is empty." << endl;
         return -1;
-    }
-    else
-    {
+    } else {
         return queue[frontA];
     }
 }
 
-bool isEmpty()
-{
+bool isEmpty() {
     return (frontA == -1);
 }
 
-bool isFull()
-{
+bool isFull() {
     return ((rearA + 1) % maxSize == frontA);
 }
 
-int CurrentSize()
-{
+int CurrentSize() {
     if (isEmpty())
         return 0;
     return (rearA - frontA + maxSize) % maxSize + 1;
 }
 
-int main()
-{
+int main() {
     int k;
     cout << "How to make queue enter 1 for LL and 2 for Array" << endl;
     cin >> k;
-    if (k == 1)
-    {
+    if (k == 1) {
         int ch, val;
         bool conti = true;
 
-        while (conti)
-        {
+        while (conti) {
             cout << "=================================================================================" << endl;
             cout << "(1) Enqueue in Queue             ";
             cout << "(2) Dequeue from Queue           ";
@@ -191,8 +152,7 @@ int main()
 
             cout << "Enter choice: ";
             cin >> ch;
-            switch (ch)
-            {
+            switch (ch) {
             case 1:
                 cout << "Enter value to be enqueued: ";
                 cin >> val;
@@ -220,9 +180,7 @@ int main()
             cin >> choice;
             conti = (choice == 'y' || choice == 'Y');
         }
-    }
-    else if (k == 2)
-    {
+    } else if (k == 2) {
         int ch, val;
         cout << "Creating Queue :" << endl;
         createQueue();
@@ -230,8 +188,7 @@ int main()
         cout << endl;
 
         bool conti = true;
-        while (conti)
-        {
+        while (conti) {
             cout << "=================================================================================" << endl;
 
             cout << "(1) Enqueue in Queue             ";
@@ -243,8 +200,7 @@ int main()
 
             cout << "Enter choice: ";
             cin >> ch;
-            switch (ch)
-            {
+            switch (ch) {
             case 1:
                 cout << "Enter value to be enqueued: ";
                 cin >> val;
@@ -275,9 +231,7 @@ int main()
             cin >> choice;
             conti = (choice == 'y' || choice == 'Y');
         }
-    }
-    else
-    {
+    } else {
         cout << "invalid exiting program" << endl;
     }
 
