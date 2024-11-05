@@ -7,16 +7,12 @@ struct Node {
     Node* right;
 };
 
-Node* createNode(int data) {
-    Node* newNode = new Node();
-    newNode->data = data;
-    newNode->left = newNode->right = nullptr;
-    return newNode;
-}
-
 Node* insert(Node* root, int data) {
     if (root == nullptr) {
-        return createNode(data);
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        newNode->data = data;
+        newNode->left = newNode->right = nullptr;
+        return newNode;
     }
     if (data < root->data) {
         root->left = insert(root->left, data);
@@ -29,7 +25,7 @@ Node* insert(Node* root, int data) {
     return root;
 }
 
-// Function to find the minimum value node in a subtree
+// Function to find the minimum value node in a right subtree
 Node* minValueNode(Node* node) {
     Node* current = node;
     while (current && current->left != nullptr) {
@@ -47,20 +43,32 @@ Node* deleteNode(Node* root, int data) {
     } else if (data > root->data) {
         root->right = deleteNode(root->right, data);
     } else {
-        if (root->left == nullptr) {
+        //0 child
+        if (root->left == nullptr && root->right == nullptr) {
+            free(root);
+            return nullptr;
+        }
+        //1 child
+        if (root->left == nullptr && root->right != nullptr) {//right child
             Node* temp = root->right;
-            delete root;
+            free(root);
             return temp;
-        } else if (root->right == nullptr) {
+        } 
+        //1 child
+        if (root->right == nullptr && root->left != nullptr) {//left child
             Node* temp = root->left;
-            delete root;
+            free(root);
             return temp;
         }
-        Node* temp = minValueNode(root->right);
-        root->data = temp->data;
-        root->right = deleteNode(root->right, temp->data);
+        //2 child
+        if (root->left != nullptr && root->right != nullptr)
+        {
+            Node* temp = minValueNode(root->right);//from right subtree
+            root->data = temp->data;
+            root->right = deleteNode(root->right, temp->data);//delete the min value from subtree
+            return root;
+        }
     }
-    return root;
 }
 
 Node* search(Node* root, int data) {
