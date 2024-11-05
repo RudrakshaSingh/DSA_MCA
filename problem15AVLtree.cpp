@@ -2,38 +2,39 @@
 #include <cstdlib>
 using namespace std;
 
-// Define a node structure for the AVL tree
-struct Node {
+struct Node
+{
     int key;
-    struct Node* left;
-    struct Node* right;
+    Node *left;
+    Node *right;
     int height;
 };
 
-// Function to get the height of a node
-int height(struct Node* node) {
+int height(Node *node)
+{
     return (node == nullptr) ? 0 : node->height;
 }
 
-// Function to get the maximum of two integers
-int max(int a, int b) {
+int max(int a, int b)
+{
     return (a > b) ? a : b;
 }
 
-// Function to create a new node
-struct Node* createNode(int key) {
-    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+Node *createNode(int key)
+{
+    Node *node = (Node *)malloc(sizeof(Node));
     node->key = key;
     node->left = nullptr;
     node->right = nullptr;
-    node->height = 1;  // New node is initially added at leaf
+    node->height = 1;
     return node;
 }
 
 // Right rotate a subtree rooted with y
-struct Node* rightRotate(struct Node* y) {
-    struct Node* x = y->left;
-    struct Node* T2 = x->right;
+Node *rightRotate(Node *y)
+{
+    Node *x = y->left;
+    Node *T2 = x->right;
 
     // Perform rotation
     x->right = y;
@@ -48,9 +49,10 @@ struct Node* rightRotate(struct Node* y) {
 }
 
 // Left rotate a subtree rooted with x
-struct Node* leftRotate(struct Node* x) {
-    struct Node* y = x->right;
-    struct Node* T2 = y->left;
+Node *leftRotate(Node *x)
+{
+    Node *y = x->right;
+    Node *T2 = y->left;
 
     // Perform rotation
     y->left = x;
@@ -65,14 +67,16 @@ struct Node* leftRotate(struct Node* x) {
 }
 
 // Get balance factor of a node
-int getBalance(struct Node* node) {
+int getBalance(Node *node)
+{
     if (node == nullptr)
         return 0;
     return height(node->left) - height(node->right);
 }
 
 // Function to insert a key into the AVL tree
-struct Node* insert(struct Node* node, int key) {
+Node *insert(Node *node, int key)
+{
     // Perform the normal BST insertion
     if (node == nullptr)
         return createNode(key);
@@ -101,64 +105,67 @@ struct Node* insert(struct Node* node, int key) {
         return leftRotate(node);
 
     // Left Right Case
-    if (balance > 1 && key > node->left->key) {
+    if (balance > 1 && key > node->left->key)
+    {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
 
     // Right Left Case
-    if (balance < -1 && key < node->right->key) {
+    if (balance < -1 && key < node->right->key)
+    {
         node->right = rightRotate(node->right);
         return leftRotate(node);
     }
 
-    // Return the unchanged node pointer
     return node;
 }
 
-// Function to find the node with the minimum key value (used in deletion)
-struct Node* minValueNode(struct Node* node) {
-    struct Node* current = node;
-
-    // Loop down to find the leftmost leaf
-    while (current->left != nullptr)
-        current = current->left;
-
-    return current;
-}
-
 // Function to delete a node from the AVL tree
-struct Node* deleteNode(struct Node* root, int key) {
+Node *deleteNode(Node *root, int key)
+{
     // Perform standard BST delete
-    if (root == nullptr)
-        return root;
+    if (!root)
+        return NULL;
 
     if (key < root->key)
+    {
         root->left = deleteNode(root->left, key);
+    }
     else if (key > root->key)
+    {
         root->right = deleteNode(root->right, key);
-    else {
-        // Node with only one child or no child
-        if ((root->left == nullptr) || (root->right == nullptr)) {
-            struct Node* temp = root->left ? root->left : root->right;
+    }
+    else
+    {
+        // 0 child leaf node
+        if (!root->left && !root->right)
+        {
+            free(root);
+            return NULL;
+        }
+        else if (root->left && !root->right) // left child
+        {
+            Node *temp = root->left;
+            free(root);
+            return temp;
+        }
+        else if (!root->left && root->right)
+        {
+            Node *temp = root->right;
+            free(root);
+            return temp;
+        }
+        else
+        { // both child exist
+            Node *curr = root->right;
+            while (curr->left)
+            {
+                curr = curr->left;
+            }
 
-            // No child case
-            if (temp == nullptr) {
-                temp = root;
-                root = nullptr;
-            } else  // One child case
-                *root = *temp; // Copy the contents of the non-empty child
-
-            free(temp);
-        } else {
-            // Node with two children: Get the inorder successor (smallest in the right subtree)
-            struct Node* temp = minValueNode(root->right);
-
-            // Copy the inorder successor's data to this node
-            root->key = temp->key;
-
-            // Delete the inorder successor
-            root->right = deleteNode(root->right, temp->key);
+            root->key = curr->key;
+            root->right = deleteNode(root->right, curr->key);
         }
     }
 
@@ -172,32 +179,41 @@ struct Node* deleteNode(struct Node* root, int key) {
     // Get the balance factor of this node to check whether this node became unbalanced
     int balance = getBalance(root);
 
-    // Left Left Case
-    if (balance > 1 && getBalance(root->left) >= 0)
-        return rightRotate(root);
-
-    // Left Right Case
-    if (balance > 1 && getBalance(root->left) < 0) {
-        root->left = leftRotate(root->left);
-        return rightRotate(root);
+    if (balance > 1)
+    {
+        // Left Left Case
+        if (getBalance(root->left) >= 0)
+        {
+            return rightRotate(root);
+        }
+        else // Left Right Case
+        {
+            root->left = leftRotate(root->left);
+            return rightRotate(root);
+        }
     }
-
-    // Right Right Case
-    if (balance < -1 && getBalance(root->right) <= 0)
-        return leftRotate(root);
-
-    // Right Left Case
-    if (balance < -1 && getBalance(root->right) > 0) {
-        root->right = rightRotate(root->right);
-        return leftRotate(root);
+    else if (balance < -1)
+    {
+        // Right Right Case
+        if (getBalance(root->right) <= 0)
+        {
+            return leftRotate(root);
+        }
+        else // Right Left Case
+        {
+            root->right = rightRotate(root->right);
+            return leftRotate(root);
+        }
     }
 
     return root;
 }
 
 // Function to print Inorder traversal
-void inorder(struct Node* root) {
-    if (root != nullptr) {
+void inorder(Node *root)
+{
+    if (root != nullptr)
+    {
         inorder(root->left);
         cout << root->key << " ";
         inorder(root->right);
@@ -205,8 +221,10 @@ void inorder(struct Node* root) {
 }
 
 // Function to print Preorder traversal
-void preOrder(struct Node* root) {
-    if (root != nullptr) {
+void preOrder(Node *root)
+{
+    if (root != nullptr)
+    {
         cout << root->key << " ";
         preOrder(root->left);
         preOrder(root->right);
@@ -214,8 +232,10 @@ void preOrder(struct Node* root) {
 }
 
 // Function to print Postorder traversal
-void postOrder(struct Node* root) {
-    if (root != nullptr) {
+void postOrder(Node *root)
+{
+    if (root != nullptr)
+    {
         postOrder(root->left);
         postOrder(root->right);
         cout << root->key << " ";
@@ -223,20 +243,23 @@ void postOrder(struct Node* root) {
 }
 
 // Main function with menu-driven options
-int main() {
-    struct Node* root = nullptr;
+int main()
+{
+    Node *root = nullptr;
     int choice, value, data;
 
     // Insert initial elements into the AVL tree
     cout << "Enter elements to insert in the tree (enter -1 to stop): ";
     cin >> data;
-    while (data != -1) {
+    while (data != -1)
+    {
         root = insert(root, data);
         cin >> data;
     }
 
     // Menu-driven loop
-    while (true) {
+    while (true)
+    {
         cout << "\nMenu:\n";
         cout << "1. Inorder Traversal\n";
         cout << "2. Preorder Traversal\n";
@@ -247,36 +270,37 @@ int main() {
         cout << "Enter your choice: ";
         cin >> choice;
 
-        switch (choice) {
-            case 1:
-                cout << "Inorder Traversal: ";
-                inorder(root);
-                cout << endl;
-                break;
-            case 2:
-                cout << "Preorder Traversal: ";
-                preOrder(root);
-                cout << endl;
-                break;
-            case 3:
-                cout << "Postorder Traversal: ";
-                postOrder(root);
-                cout << endl;
-                break;
-            case 4:
-                cout << "Enter value to insert: ";
-                cin >> value;
-                root = insert(root, value);
-                break;
-            case 5:
-                cout << "Enter value to delete: ";
-                cin >> value;
-                root = deleteNode(root, value);
-                break;
-            case 6:
-                return 0;
-            default:
-                cout << "Invalid choice. Please try again." << endl;
+        switch (choice)
+        {
+        case 1:
+            cout << "Inorder Traversal: ";
+            inorder(root);
+            cout << endl;
+            break;
+        case 2:
+            cout << "Preorder Traversal: ";
+            preOrder(root);
+            cout << endl;
+            break;
+        case 3:
+            cout << "Postorder Traversal: ";
+            postOrder(root);
+            cout << endl;
+            break;
+        case 4:
+            cout << "Enter value to insert: ";
+            cin >> value;
+            root = insert(root, value);
+            break;
+        case 5:
+            cout << "Enter value to delete: ";
+            cin >> value;
+            root = deleteNode(root, value);
+            break;
+        case 6:
+            return 0;
+        default:
+            cout << "Invalid choice. Please try again." << endl;
         }
     }
 

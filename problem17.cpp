@@ -60,16 +60,16 @@ vector<int> dijkstra(int v, unordered_map<int, vector<pair<int, int>>> &adj, int
 }
 
 // Find function for union-find (Disjoint Set)
-int findParent(int u, vector<int> &parent) {
-    if (u == parent[u])
-        return u;
-    return parent[u] = findParent(parent[u], parent); // Path compression
+int findParent(vector<int> &parent, int node) {
+    if (parent[node] == node)
+        return node;
+    return parent[node] = findParent(parent,parent[node]); // Path compression
 }
 
 // Union function for union-find (Disjoint Set)
 void unionSets(int u, int v, vector<int> &parent, vector<int> &rank) {
-    u = findParent(u, parent);
-    v = findParent(v, parent);
+    u = findParent(parent,u);
+    v = findParent(parent,v);
     if (rank[u] < rank[v])
         parent[u] = v;
     else if (rank[v] < rank[u])
@@ -80,43 +80,39 @@ void unionSets(int u, int v, vector<int> &parent, vector<int> &rank) {
     }
 }
 
-// Kruskal’s Minimum Spanning Tree Algorithm
-int kruskalMST(int vertex, vector<vector<int>>& edges) {
-    // Sorting edges based on their weights
-    sort(edges.begin(), edges.end(), [](const vector<int>& a, const vector<int>& b) {
-        return a[2] < b[2]; // Compare weights
-    });
-
-    vector<int> parent(vertex);
-    vector<int> rank(vertex, 0);
-
-    // Initializing each vertex's parent to itself
-    for (int i = 0; i < vertex; i++) {
+void makeSet(vector<int> &parent, vector<int> &rank, int n) {
+    for (int i = 0; i < n; i++) {
         parent[i] = i;
+        rank[i] = 0;
     }
+}
 
-    int minCost = 0;
-    vector<vector<int>> mst; // Store the MST edges
+bool cmp(const vector<int>& a, const vector<int>& b) {
+    return a[2] < b[2];
+}
 
-    for (const auto& edge : edges) {
-        int u = edge[0];
-        int v = edge[1];
-        int weight = edge[2];
+// Kruskal’s Minimum Spanning Tree Algorithm
+int kruskalMST(int n, vector<vector<int>>& edges) {
+    // Sorting edges based on their weights
+    sort(edges.begin(), edges.end(), cmp);
 
-        if (findParent(u, parent) != findParent(v, parent)) {
-            minCost += weight;
-            mst.push_back(edge); // Include edge in the MST
-            unionSets(u, v, parent, rank);
+    vector<int> parent(n);
+    vector<int> rank(n);
+
+    makeSet(parent, rank,n);
+
+    int minWeight = 0;
+    for(int i=0;i<edges.size();i++){
+        int u = findParent( parent,edges[i][0]);
+        int v = findParent( parent,edges[i][1]);
+        int wt=edges[i][2];
+        if(u!=v){
+            minWeight+=wt;
+            unionSets(u,v,parent,rank);
         }
     }
 
-    // Printing the edges of the MST
-    cout << "Edges in the Minimum Spanning Tree:\n";
-    for (const auto& edge : mst) {
-        cout << edge[0] << " - " << edge[1] << " with weight " << edge[2] << "\n";
-    }
-
-    return minCost;
+    return minWeight;
 }
 
 // Function to print edges

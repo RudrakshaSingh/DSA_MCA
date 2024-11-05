@@ -3,7 +3,7 @@ using namespace std;
 
 void addEdge(int u, int v, unordered_map<int, vector<int>> &adjList) {
     adjList[u].push_back(v);
-    adjList[v].push_back(u); //  graph
+    adjList[v].push_back(u); 
 }
 
 void prepareAdjList(unordered_map<int, vector<int>> &adjList, vector<pair<int, int>> edges) {
