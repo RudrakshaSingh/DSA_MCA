@@ -64,7 +64,7 @@ int main() {
 
     bool conti = true;
     while (conti) {
-        cout << "=================================================================================" << endl;
+        cout << "=========================================================" << endl;
 
         cout << "(1) Push in stack             ";
         cout << "(2) Pop from stack             ";
@@ -77,7 +77,7 @@ int main() {
         cin >> ch;
         switch (ch) {
         case 1: {
-            cout << "Enter value to be pushed [0-9]:";
+            cout << "Enter value to be pushed:";
             cin >> val;
             push(val);
             break;

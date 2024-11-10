@@ -25,7 +25,6 @@ void traverseList() {
         temp = temp -> next;
     }
     cout << temp -> data << endl;
-    cout << endl;
     cout << "---------------------------------" << endl;
 }
 
@@ -229,11 +228,11 @@ int main() {
         }
 
         cout << "\nMenu:\n";
-        cout << "1. Traverse In LinkedList\n";
-        cout << "2. Insert at Beginning\n";
+        cout << "1. Traverse In LinkedList   ";
+        cout << "2. Insert at Beginning    ";
         cout << "3. Insert at End\n";
-        cout << "4. Insert after given node\n";
-        cout << "5. Delete from Beginning\n";
+        cout << "4. Insert after given node  ";
+        cout << "5. Delete from Beginning  ";
         cout << "6. Delete from End\n";
         cout << "7. Delete the given node\n";
 

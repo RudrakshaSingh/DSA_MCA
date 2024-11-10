@@ -114,7 +114,7 @@ int CurrentSize() {
 
 int main() {
     int k;
-    cout << "How to make queue enter " << endl << "     1 for Stack using LL " << endl << "     2 for Linear queue using LL" << endl;
+    cout << "How to make queue enter " << endl << "     1 for Stack using LL " << endl << "     2 for queue using LL" << endl;
     cin >> k;
     if (k == 1) {
         int ch, val;
@@ -123,7 +123,7 @@ int main() {
 
         bool conti = true;
         while (conti) {
-            cout << "=================================================================================" << endl;
+            cout << "==========================================================" << endl;
 
             cout << "(1) Push in stack             ";
             cout << "(2) Pop from stack             ";
@@ -172,7 +172,7 @@ int main() {
         bool conti = true;
 
         while (conti) {
-            cout << "=================================================================================" << endl;
+            cout << "=======================================================" << endl;
             cout << "(1) Enqueue in Queue             ";
             cout << "(2) Dequeue from Queue           ";
             cout << "(3) Peek at front element        " << endl;

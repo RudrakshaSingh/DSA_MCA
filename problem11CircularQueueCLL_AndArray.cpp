@@ -143,7 +143,7 @@ int main() {
         bool conti = true;
 
         while (conti) {
-            cout << "=================================================================================" << endl;
+            cout << "=======================================================" << endl;
             cout << "(1) Enqueue in Queue             ";
             cout << "(2) Dequeue from Queue           ";
             cout << "(3) Peek at front element        " << endl;
@@ -189,7 +189,7 @@ int main() {
 
         bool conti = true;
         while (conti) {
-            cout << "=================================================================================" << endl;
+            cout << "============================================" << endl;
 
             cout << "(1) Enqueue in Queue             ";
             cout << "(2) Dequeue from Queue           ";

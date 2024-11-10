@@ -4,7 +4,7 @@ using namespace std;
 
 // Merge Sort Helper Functions
 void merge(int arr[], int low, int mid, int high) {
-    int* temp = (int*)malloc((high - low + 1) * sizeof(int)); // temporary array
+    int temp[high - low + 1]; // temporary array
     int left = low;           // starting index of left half of arr
     int right = mid + 1;      // starting index of right half of arr
     int k = 0;                // index for temp array
@@ -92,7 +92,7 @@ int main() {
     cout << "Enter the number of elements : ";
     cin >> n;
 
-    int* arr=(int*)malloc(n * sizeof(int));
+    int arr[n];
 
 
     cout << "Enter the elements of the array:" << endl;

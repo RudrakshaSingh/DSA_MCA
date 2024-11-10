@@ -20,7 +20,6 @@ void enqueue(int value) {
     queue[++rear] = value;
 }
 
-// Function to dequeue an element from the queue
 int dequeue() {
     if (front == -1 || front > rear) {
         cout << "Queue Underflow!" << endl;
@@ -29,7 +28,6 @@ int dequeue() {
 
     int dequeuedValue = queue[front++];
 
-    // If the queue becomes empty after dequeuing, reset front and rear
     if (front > rear) {
         front = rear = -1;
     }
@@ -94,7 +92,6 @@ int main() {
     cout << "Enter the number of edges: ";
     cin >> m;
 
-    // User input for the edges
     cout << "Enter the edges (u v) where u and v are vertices connected by an edge:" << endl;
     for (int i = 0; i < m; i++) {
         int u, v;
