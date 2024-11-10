@@ -1,140 +1,142 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstdlib>
 using namespace std;
 
-void addEdge(int u, int v, unordered_map<int, vector<int>> &adjList) {
-    adjList[u].push_back(v);
-    adjList[v].push_back(u); 
-}
+// Global variables for Queue
+int* queue;
+int front = -1, rear = -1, queue_capacity;
 
-void prepareAdjList(unordered_map<int, vector<int>> &adjList, vector<pair<int, int>> edges) {
-    for (auto edge : edges) {
-        addEdge(edge.first, edge.second, adjList);
+// Global visited array and adjacency matrix
+int* visited;
+int** adjMatrix;
+int n;  // Number of vertices
+
+void enqueue(int value) {
+    if (rear >= queue_capacity - 1) {
+        cout << "Queue Overflow!" << endl;
+        return;
     }
+    if (front == -1) front = 0;
+    queue[++rear] = value;
 }
 
-// Function to print the adjacency list
-void printAdjList(const unordered_map<int, vector<int>> &adjList) {
-    cout << "Adjacency List:" << endl;
-    for (const auto &pair : adjList) {
-        cout << pair.first << ": ";
-        for (int neighbor : pair.second) {
-            cout << neighbor << " ";
+// Function to dequeue an element from the queue
+int dequeue() {
+    if (front == -1 || front > rear) {
+        cout << "Queue Underflow!" << endl;
+        return -1;
+    }
+
+    int dequeuedValue = queue[front++];
+
+    // If the queue becomes empty after dequeuing, reset front and rear
+    if (front > rear) {
+        front = rear = -1;
+    }
+
+    return dequeuedValue;
+}
+
+bool isQueueEmpty() {
+    return (front == -1 || front > rear);
+}
+
+bool isQueueFull() {
+    return (rear == queue_capacity - 1);
+}
+
+void Dfs(int v) {
+    cout << v << " ";
+    visited[v] = 1;  // Mark node as visited (1)
+    for (int i = 0; i < n; i++) {  // Explore all neighbors
+        if (adjMatrix[v][i] == 1 && visited[i] == 0) {  // If not visited
+            Dfs(i);
         }
-        cout << endl;
     }
 }
 
-// Function to perform BFS traversal from a given starting vertex
-void bfs(int start, unordered_map<int, vector<int>> &adjList, unordered_map<int, bool> &visited, vector<int> &ans) {
-    queue<int> q;
-    q.push(start);
-    visited[start] = true;
+void bfs(int v) {
+    enqueue(v);  // Enqueue the starting vertex
+    visited[v] = 1; 
+    cout << v << " ";
 
-    while (!q.empty()) {
-        int vertex = q.front();
-        q.pop();
-        ans.push_back(vertex); // Store the result of BFS
-
-        for (int neighbor : adjList[vertex]) {
-            if (!visited[neighbor]) {
-                visited[neighbor] = true;
-                q.push(neighbor);
+    while (!isQueueEmpty()) {
+        int node = dequeue();  // Dequeue a vertex from the queue
+        for (int i = 0; i < n; i++) {
+            if (adjMatrix[node][i] == 1 && visited[i] == 0) {  // If not visited
+                visited[i] = 1;  // Mark node as visited
+                cout << i << " ";  // Print the visited vertex
+                enqueue(i);
             }
         }
     }
 }
 
-// Function to perform BFS on the entire graph
-vector<int> BFS(int vertex, unordered_map<int, vector<int>> &adjList) {
-    vector<int> ans;
-    unordered_map<int, bool> visited;
-
-    // Traverse all components of the graph
-    for (int i = 0; i < vertex; i++) {
-        if (!visited[i]) {
-            bfs(i, adjList, visited, ans);
-        }
-    }
-    return ans;
-}
-
-// Function to perform DFS traversal from a given starting vertex
-void dfs(int vertex, unordered_map<int, vector<int>> &adjList, unordered_map<int, bool> &visited, vector<int> &ans) {
-    visited[vertex] = true;
-    ans.push_back(vertex); // Store the result of DFS
-
-    for (int neighbor : adjList[vertex]) {
-        if (!visited[neighbor]) {
-            dfs(neighbor, adjList, visited, ans);
-        }
-    }
-}
-
-// Function to perform DFS on the entire graph
-vector<int> DFS(int vertex, unordered_map<int, vector<int>> &adjList) {
-    vector<int> ans;
-    unordered_map<int, bool> visited;
-
-    // Traverse all components of the graph
-    for (int i = 0; i < vertex; i++) {
-        if (!visited[i]) {
-            dfs(i, adjList, visited, ans);
-        }
-    }
-    return ans;
-}
-
 int main() {
-    int n;
-    cout << "Enter the number of vertices: " ;
+    int m, choice, source;
+
+    cout << "Enter the number of vertices: ";
     cin >> n;
-    int m;
+
+    // Dynamically allocate memory for the adjacency matrix
+    adjMatrix = (int**)malloc(n * sizeof(int*));
+    for (int i = 0; i < n; i++) {
+        adjMatrix[i] = (int*)malloc(n * sizeof(int));
+    }
+
+    // Initialize the adjacency matrix to 0 (no edges)
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            adjMatrix[i][j] = 0;
+        }
+    }
+
     cout << "Enter the number of edges: ";
     cin >> m;
 
-    vector<pair<int, int>> edges;
-    
+    // User input for the edges
+    cout << "Enter the edges (u v) where u and v are vertices connected by an edge:" << endl;
     for (int i = 0; i < m; i++) {
-        cout << "Enter edges (u v): ";
-        int x, y;
-        cin >> x >> y;
-        edges.push_back({x, y});
+        int u, v;
+        cin >> u >> v;
+        adjMatrix[u][v] = 1; 
+        adjMatrix[v][u] = 1; // For undirected graph
     }
 
-    // Prepare adjacency list
-    unordered_map<int, vector<int>> adjList;
-    prepareAdjList(adjList, edges);
+    visited = (int*)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++) {
+        visited[i] = 0;  // Mark all vertices as unvisited initially
+    }
 
-    // Print adjacency list
-    printAdjList(adjList);
+    queue_capacity = n;
+    queue = (int*)malloc(queue_capacity * sizeof(int));
 
-    int choice;
-    cout << "Choose Traversal Method:" << endl;
-    cout << "1. BFS" << endl;
-    cout << "2. DFS" << endl;
-    cout << "Enter your choice: ";
+    cout << "\nChoose traversal method:" << endl;
+    cout << "1. DFS\n2. BFS" << endl;
     cin >> choice;
 
-    vector<int> ans;
+    cout << "Enter the source node for traversal: ";
+    cin >> source;
 
     switch (choice) {
-    case 1: // BFS
-        ans = BFS(n, adjList);
-        cout << "BFS Traversal Order: ";
-        break;
-    case 2: // DFS
-        ans = DFS(n, adjList);
-        cout << "DFS Traversal Order: ";
-        break;
-    default:
-        cout << "Invalid choice!" << endl;
-        return 0;
+        case 1:
+            cout << "\nDFS Traversal starting from node " << source << ": ";
+            Dfs(source);
+            break;
+        case 2:
+            cout << "\nBFS Traversal starting from node " << source << ": ";
+            bfs(source);
+            break;
+        default:
+            cout << "Invalid choice!" << endl;
     }
 
-    for (int i = 0; i < ans.size(); i++) {
-        cout << ans[i] << " ";
+    for (int i = 0; i < n; i++) {
+        free(adjMatrix[i]);
     }
-    cout << endl;
+    free(adjMatrix);
+    free(visited);
+    free(queue);
 
     return 0;
 }

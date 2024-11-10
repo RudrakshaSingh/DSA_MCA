@@ -146,14 +146,14 @@ int main(){
 
     while (continueProgram){
         cout << "\nMenu:\n";
-        cout << "1. Traverse Array\n";
-        cout << "2. Insert at Beginning\n";
+        cout << "1. Traverse Array        ";
+        cout << "2. Insert at Beginning     ";
         cout << "3. Insert at End\n";
-        cout << "4. Insert at Position\n";
-        cout << "5. Delete from Beginning\n";
+        cout << "4. Insert at Position    ";
+        cout << "5. Delete from Beginning   ";
         cout << "6. Delete from End\n";
-        cout << "7. Delete from Position\n";
-        cout << "8. Linear Search\n";
+        cout << "7. Delete from Position  ";
+        cout << "8. Linear Search           ";
         cout << "9. Binary Search (Array should be sorted)\n";
         cout << "10. Insertion Sort\n";
         cout << "Enter your choice: ";

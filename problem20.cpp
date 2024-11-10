@@ -1,11 +1,10 @@
 #include <iostream>
 using namespace std;
 
-const int MAX_SIZE = 100; // maximum size of the array
 
 // Merge Sort Helper Functions
 void merge(int arr[], int low, int mid, int high) {
-    int temp[high - low + 1]; // temporary array
+    int* temp = (int*)malloc((high - low + 1) * sizeof(int)); // temporary array
     int left = low;           // starting index of left half of arr
     int right = mid + 1;      // starting index of right half of arr
     int k = 0;                // index for temp array
@@ -13,11 +12,9 @@ void merge(int arr[], int low, int mid, int high) {
     // Storing elements in the temporary array in a sorted manner
     while (left <= mid && right <= high) {
         if (arr[left] <= arr[right]) {
-            temp[k++] = arr[left++];
-            //or
-            // temp[k] = arr[left];
-            // left++;  
-            // k++;     
+            temp[k] = arr[left];
+            left++;  
+            k++;     
         } else {
             temp[k++] = arr[right++];
         }
@@ -37,6 +34,7 @@ void merge(int arr[], int low, int mid, int high) {
     for (int i = low; i <= high; i++) {
         arr[i] = temp[i - low];
     }
+    free(temp); 
 }
 
 void mergeSort(int arr[], int low, int high) {
@@ -75,9 +73,9 @@ int partition(int arr[], int low, int high) {
 
 void quickSort(int arr[], int low, int high) {
     if (low < high) {
-        int pi = partition(arr, low, high); // put pivot in correct place and return index
-        quickSort(arr, low, pi - 1);        // left partition
-        quickSort(arr, pi + 1, high);       // right partition
+        int partionIndex = partition(arr, low, high); // put pivot in correct place and return index
+        quickSort(arr, low, partionIndex - 1);        // left partition
+        quickSort(arr, partionIndex + 1, high);       // right partition
     }
 }
 
@@ -89,16 +87,13 @@ void displayArray(int arr[], int n) {
 }
 
 int main() {
-    int arr[MAX_SIZE]; // array of max size 100
     int n, choice;
 
-    cout << "Enter the number of elements (max 100): ";
+    cout << "Enter the number of elements : ";
     cin >> n;
 
-    if (n > MAX_SIZE) {
-        cout << "Number of elements exceeds maximum size of 100, setting it to 10" << endl;
-        n = 10;
-    }
+    int* arr=(int*)malloc(n * sizeof(int));
+
 
     cout << "Enter the elements of the array:" << endl;
     for (int i = 0; i < n; i++) {
@@ -107,7 +102,7 @@ int main() {
 
     cout << "Select Sorting Algorithm:" << endl;
     cout << "1. Merge Sort" << endl;
-    cout << "2. Quick Sort (Leftmost Pivot)" << endl;
+    cout << "2. Quick Sort " << endl;
     cout << "3. Exit" << endl;
     cout << "Enter your choice : ";
     cin >> choice;
@@ -122,10 +117,10 @@ int main() {
         break;
 
     case 2:
-        cout << "Before Sorting (Quick Sort with Leftmost Pivot): " << endl;
+        cout << "Before Sorting (Quick Sort): " << endl;
         displayArray(arr, n);
         quickSort(arr, 0, n - 1);
-        cout << "After Sorting (Quick Sort with Leftmost Pivot): " << endl;
+        cout << "After Sorting (Quick Sort): " << endl;
         displayArray(arr, n);
         break;
 

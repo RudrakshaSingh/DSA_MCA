@@ -14,10 +14,6 @@ struct StackNode {
     StackNode* next;
 };
 
-StackNode* createStack() {
-    return nullptr;
-}
-
 bool isEmpty(StackNode* top) {
     return top == nullptr;
 }
@@ -68,7 +64,7 @@ Node* insert(Node* root, int data) {
 void inorder(Node* root) {
     if (root == nullptr) return;
     
-    StackNode* stack = createStack();
+    StackNode* stack = nullptr;
     Node* current = root;
     
     while (true)
@@ -91,7 +87,7 @@ void inorder(Node* root) {
 void preorder(Node* root) {
     if (root == nullptr) return;
     
-    StackNode* stack = createStack();
+    StackNode* stack = nullptr;
     push(stack, root);
     
     while (!isEmpty(stack)) {
@@ -114,8 +110,8 @@ void preorder(Node* root) {
 void postorder(Node* root) {
     if (root == nullptr) return;
     
-    StackNode* s1 = createStack();
-    StackNode* s2 = createStack();
+    StackNode* s1 = nullptr;
+    StackNode* s2 = nullptr;
     
     push(s1, root);
     

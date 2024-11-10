@@ -66,7 +66,6 @@ Node *leftRotate(Node *x)
     return y;
 }
 
-// Get balance factor of a node
 int getBalance(Node *node)
 {
     if (node == nullptr)
@@ -74,7 +73,6 @@ int getBalance(Node *node)
     return height(node->left) - height(node->right);
 }
 
-// Function to insert a key into the AVL tree
 Node *insert(Node *node, int key)
 {
     // Perform the normal BST insertion
@@ -88,7 +86,7 @@ Node *insert(Node *node, int key)
     else // Duplicate keys are not allowed in the AVL tree
         return node;
 
-    // Update the height of this ancestor node
+    // Update the height of ancestor node and insertion
     node->height = 1 + max(height(node->left), height(node->right));
 
     // Get the balance factor to check whether this node became unbalanced
@@ -242,6 +240,17 @@ void postOrder(Node *root)
     }
 }
 
+Node* search(Node* root, int data) {
+    if (root == nullptr || root->key == data) {
+        return root;
+    }
+    if (data < root->key) {
+        return search(root->left, data);
+    } else {
+        return search(root->right, data);
+    }
+}
+
 // Main function with menu-driven options
 int main()
 {
@@ -266,7 +275,8 @@ int main()
         cout << "3. Postorder Traversal\n";
         cout << "4. Insert a Node\n";
         cout << "5. Delete a Node\n";
-        cout << "6. Exit\n";
+        cout << "6. Search" << endl;
+        cout << "7. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -298,6 +308,15 @@ int main()
             root = deleteNode(root, value);
             break;
         case 6:
+            cout << "Enter value to search: ";
+            cin >> value;
+            if (search(root, value) == nullptr) {
+                cout << "Value not found." << endl;
+            } else {
+                cout << "Value found." << endl;
+            }
+            break;
+        case 7:
             return 0;
         default:
             cout << "Invalid choice. Please try again." << endl;

@@ -1,194 +1,165 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Function to print the adjacency list
-void printAdjList(const unordered_map<int, vector<pair<int, int>>> &adjList) {
-    cout << "Adjacency List:\n";
-    for (const auto &pair : adjList) {
-        cout << pair.first << ": ";
-        for (const auto &neighbor : pair.second) {
-            cout << "(" << neighbor.first << ", " << neighbor.second << ") "; // (neighbor, weight)
+const int MAX_VERTICES = 100;
+// Structure for edges used in Kruskal's algorithm
+struct Edge {
+    int u, v, weight;
+};
+
+// Kruskal's algorithm
+int parent[MAX_VERTICES], Rank[MAX_VERTICES];
+
+int findParent(int node) {
+    if (parent[node] == node) return node;
+    return parent[node] = findParent(parent[node]);
+}
+
+void unionSets(int u, int v) {
+    int rootU = findParent(u);
+    int rootV = findParent(v);
+
+    if (rootU != rootV) {
+        if (Rank[rootU] > Rank[rootV]) {
+            parent[rootV] = rootU;
+        } else if (Rank[rootU] < Rank[rootV]) {
+            parent[rootU] = rootV;
+        } else {
+            parent[rootV] = rootU;
+            Rank[rootU]++;
         }
-        cout << endl;
     }
 }
 
-// Function to prepare the adjacency list from edges
-void prepareAdjList(unordered_map<int, vector<pair<int, int>>> &adj, const vector<vector<int>> &edges) {
-    for (const auto &edge : edges) {
-        int u = edge[0], v = edge[1], w = edge[2];
-        adj[u].push_back({v, w});
-        adj[v].push_back({u, w}); // Because it's an undirected graph
-    }
-}
-
-vector<int> dijkstra(int v, unordered_map<int, vector<pair<int, int>>> &adj, int s) {
-    vector<int> dist(v);//no of vertices
-    for (int i = 0; i < v; i++)
-    {
-        dist[i]=INT_MAX;//making every distance to max
+int kruskal(int n, int m, Edge edges[]) {
+    // Initialize the parent and rank for union-find
+    for (int i = 0; i < n; i++) {
+        parent[i] = i;
+        Rank[i] = 0;
     }
 
-    set<pair<int,int>> st;
-    dist[s]=0;
-    st.insert(make_pair(0,s));
-
-    while(!st.empty())
-    {//fetch top record
-        auto top = *(st.begin());//st.begin() returns an iterator pointing to the first element * for dereference
-        int nodeDistance = top.first;
-        int topNode = top.second;
-        st.erase(st.begin());//remove top record
-
-        //traverse on neighbours
-        for (auto neighbour : adj[topNode]){
-            if (nodeDistance + neighbour.second < dist[neighbour.first]){
-                //update distance
-                auto record = st.find(make_pair(dist[neighbour.first],neighbour.first));
-
-                if(record!=st.end()){//if found
-                    st.erase(record);
-                }
-                //update
-                dist[neighbour.first]=nodeDistance+neighbour.second;
-                //push in set
-                st.insert(make_pair(dist[neighbour.first],neighbour.first));
+    // Sort the edges based on weight
+    for (int i = 0; i < m - 1; i++) {
+        for (int j = i + 1; j < m; j++) {
+            if (edges[i].weight > edges[j].weight) {
+                Edge temp = edges[i];
+                edges[i] = edges[j];
+                edges[j] = temp;
             }
         }
     }
-    return dist; 
-}
 
-// Find function for union-find (Disjoint Set)
-int findParent(vector<int> &parent, int node) {
-    if (parent[node] == node)
-        return node;
-    return parent[node] = findParent(parent,parent[node]); // Path compression
-}
+    int mstWeight = 0;
+    int edgesAdded = 0;
+    
+    // Process edges to form the MST
+    for (int i = 0; i < m; i++) {
+        int u = edges[i].u;
+        int v = edges[i].v;
+        int weight = edges[i].weight;
 
-// Union function for union-find (Disjoint Set)
-void unionSets(int u, int v, vector<int> &parent, vector<int> &rank) {
-    u = findParent(parent,u);
-    v = findParent(parent,v);
-    if (rank[u] < rank[v])
-        parent[u] = v;
-    else if (rank[v] < rank[u])
-        parent[v] = u;
-    else {
-        parent[v] = u;
-        rank[u]++;
+        if (findParent(u) != findParent(v)) {
+            unionSets(u, v);
+            mstWeight += weight;
+            edgesAdded++;
+        }
+
+        if (edgesAdded == n - 1) break;
     }
+
+    return mstWeight;
 }
 
-void makeSet(vector<int> &parent, vector<int> &rank, int n) {
+void dijkstra(int n, int adjMatrix[MAX_VERTICES][MAX_VERTICES], int source) {
+    int dist[MAX_VERTICES];           //distance array
+    int visited[MAX_VERTICES] = {0};  // 0 means unvisited, 1 means visited
+
+    // Initialize distances
     for (int i = 0; i < n; i++) {
-        parent[i] = i;
-        rank[i] = 0;
+        dist[i] = INT_MAX;
     }
-}
+    dist[source] = 0;
 
-bool cmp(const vector<int>& a, const vector<int>& b) {
-    return a[2] < b[2];
-}
+    // This loop iterates over all vertices (except the source)
+    for (int count = 0; count < n - 1; count++) {
+        int u = -1;
+        // Find the unvisited node with the minimum distance
+        for (int i = 0; i < n; i++) {
+            if (visited[i] == 0 && (u == -1 || dist[i] < dist[u])) {
+                u = i;
+            }
+        }
 
-// Kruskal’s Minimum Spanning Tree Algorithm
-int kruskalMST(int n, vector<vector<int>>& edges) {
-    // Sorting edges based on their weights
-    sort(edges.begin(), edges.end(), cmp);
+        visited[u] = 1;  // Mark node as visited
 
-    vector<int> parent(n);
-    vector<int> rank(n);
-
-    makeSet(parent, rank,n);
-
-    int minWeight = 0;
-    for(int i=0;i<edges.size();i++){
-        int u = findParent( parent,edges[i][0]);
-        int v = findParent( parent,edges[i][1]);
-        int wt=edges[i][2];
-        if(u!=v){
-            minWeight+=wt;
-            unionSets(u,v,parent,rank);
+        // Update distances for the neighbors of u
+        for (int v = 0; v < n; v++) {//CHECK EDGE EXIST,CHECK NOT VISITED,,CHECK IF DISTANCE IS STILL NOT INFINITY, CHECK IF IT IS SHORTER
+            if (adjMatrix[u][v] != 0 && visited[v] == 0 && dist[u] != INT_MAX && dist[u] + adjMatrix[u][v] < dist[v]) {
+                dist[v] = dist[u] + adjMatrix[u][v];
+            }
         }
     }
 
-    return minWeight;
-}
-
-// Function to print edges
-void printEdges(const vector<vector<int>>& edges) {
-    cout << "Edges List:\n";
-    for (const auto& edge : edges) {
-        cout << edge[0] << " -- " << edge[1] << " with weight " << edge[2] << endl;
+    // Print shortest distances
+    for (int i = 0; i < n; i++) {
+        if (dist[i] == INT_MAX) {
+            cout << "Vertex " << i << " is unreachable\n";
+        } else {
+            cout << "Distance to vertex " << i << " is " << dist[i] << endl;
+        }
     }
 }
 
 int main() {
-    int n; // number of vertices
-    cout << "Enter the number of vertices: ";
-    cin >> n;
-    int m; // number of edges
-    cout << "Enter the number of edges: ";
-    cin >> m;
+    int n, m;
+    cout << "Enter the number of vertices and edges: ";
+    cin >> n >> m;
 
-    vector<vector<int>> edges; // Store edges as {u, v, weight}
-    unordered_map<int, vector<pair<int, int>>> adj; // adjacency list
-
+    // Input edges before selecting the algorithm
+    Edge edges[m];
+    cout << "Enter the edges (u, v, weight):\n";
     for (int i = 0; i < m; i++) {
-        cout << "Enter edges (u v weight): ";
-        int u, v, w;
-        cin >> u >> v >> w;
-        edges.push_back({u, v, w});
+        cin >> edges[i].u >> edges[i].v >> edges[i].weight;
     }
 
-    // Prepare adjacency list
-    prepareAdjList(adj, edges);
-
-    // Print the adjacency list
-    printAdjList(adj);
-    // Print the edges
-    printEdges(edges);
+    // Print the edges before the user selects the algorithm
+    cout << "\nEntered edges:\n";
+    for (int i = 0; i < m; i++) {
+        cout << "Edge " << i + 1 << ": " << edges[i].u << " - " << edges[i].v << " (Weight: " << edges[i].weight << ")\n";
+    }
 
     int choice;
-    cout << "Choose Algorithm:" << endl;
-    cout << "1. Dijkstra's Shortest Path Algorithm" << endl;
-    cout << "2. Kruskal's Minimum Spanning Tree Algorithm" << endl;
+    cout << "Choose the algorithm to run:\n";
+    cout << "1. Kruskal's Algorithm (Minimum Spanning Tree)\n";
+    cout << "2. Dijkstra's Algorithm (Shortest Path)\n";
     cout << "Enter your choice: ";
     cin >> choice;
 
-    switch (choice) {
-        case 1: {
-            int source;
-            cout << "Enter the source vertex: ";
-            cin >> source;
-            vector<int> distances = dijkstra(n, adj, source); // Pass the adjacency list to Dijkstra
-            cout << "Shortest distances from source " << source << ": ";
-            for (int i = 0; i < distances.size(); i++) {
-                cout << distances[i] << " ";
-            }
-            cout << endl;
-            break;
+    if (choice == 1) {
+        int mstWeight = kruskal(n, m, edges);
+        cout << "The weight of the Minimum Spanning Tree (MST) is: " << mstWeight << endl;
+
+    } else if (choice == 2) {
+        int adjMatrix[MAX_VERTICES][MAX_VERTICES] = {0};  // Initialize all values to 0 (no edges)
+
+        // create adjacency matrix for Dijkstra
+        for (int i = 0; i < m; i++) {
+            int u = edges[i].u;
+            int v = edges[i].v;
+            int weight = edges[i].weight;
+            adjMatrix[u][v] = weight;
+            adjMatrix[v][u] = weight; // Since the graph is undirected
         }
-        case 2: {
-            int minCost = kruskalMST(n, edges);
-            cout << "Minimum cost of the spanning tree: " << minCost << endl;
-            break;
-        }
-        default:
-            cout << "Invalid choice!" << endl;
-            return 0;
+
+        int source;
+        cout << "Enter the source vertex: ";
+        cin >> source;
+
+        dijkstra(n, adjMatrix, source);
+
+    } else {
+        cout << "Invalid choice!" << endl;
     }
 
     return 0;
 }
-
-// 5
-// 7
-// 0 1 7
-// 0 2 1
-// 0 3 2
-// 1 2 3
-// 1 3 5
-// 1 4 1
-// 3 4 7
-//op=1 3 0 3 4
