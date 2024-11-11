@@ -76,8 +76,7 @@ void countSort(int arr[], int n) {
     // Place elements in the sorted array using the cumulative count
     int output[n];
     for (int i = n - 1; i >= 0; i--) {
-        output[count[arr[i]] - 1] = arr[i];
-        count[arr[i]]--;
+        output[--count[arr[i]]] = arr[i];//put after decrementing
     }
 
     // Copy the sorted elements back to the original array
@@ -115,9 +114,7 @@ void radixSort(int arr[], int n){
 
         // Build the output array
         for (int i = n - 1; i >= 0; i--) {
-            int digit = (arr[i] / div) % 10;
-            output[count[digit] - 1] = arr[i];
-            count[digit]--;
+            output[--count[(arr[i] / div) % 10]] = arr[i];
         }
 
         for (int i = 0; i < n; i++) {
@@ -131,41 +128,36 @@ void bucketSort(int arr[], int n) {
     int maxElement = INT_MIN;
     int minElement = INT_MAX;
 
-    // Find the maximum and minimum elements in the array
     for (int i = 0; i < n; i++) {
         if (arr[i] > maxElement) maxElement = arr[i];
         if (arr[i] < minElement) minElement = arr[i];
     }
 
-    // Number of buckets is set to n, you can adjust it as needed
-    int bucketCount = n;
-    int bucketList[bucketCount][n];  // 2D array for buckets
-    int bucketSizes[bucketCount];  // Array to store the sizes of each bucket
+    int bucketList[n][n]; 
+    int bucketSizes[n];  
 
     // Initialize all bucket sizes to 0
-    for (int i = 0; i < bucketCount; i++) {
+    for (int i = 0; i < n; i++) {
         bucketSizes[i] = 0;
     }
 
     // Calculate range for each bucket
-    int range = (maxElement - minElement) / (bucketCount - 1);
+    int range = (maxElement - minElement) / (n);
     if (range == 0) range = 1;  // Ensure that range is at least 1
 
     // Distribute elements into buckets
     for (int i = 0; i < n; i++) {
         int bucketIndex = (arr[i] - minElement) / range;  // Determine the bucket index
-        if (bucketIndex == bucketCount) bucketIndex--;  // Ensure it's within bounds
+        if (bucketIndex == n) bucketIndex--;  // Ensure it's within bounds
         bucketList[bucketIndex][bucketSizes[bucketIndex]++] = arr[i];
     }
 
-    // Sort each bucket using heapSort
     int index = 0;
-    for (int i = 0; i < bucketCount; i++) {
+    for (int i = 0; i < n; i++) {
         if (bucketSizes[i] > 0) {
             heapSort(bucketList[i], bucketSizes[i]);  // Sort the bucket using heapSort
-            // Place the sorted elements back into the original array
             for (int j = 0; j < bucketSizes[i]; j++) {
-                arr[index++] = bucketList[i][j];
+                arr[index++] = bucketList[i][j];// Place the sorted elements back into the original array
             }
         }
     }
@@ -184,8 +176,8 @@ int main() {
 
     int arr[n];
 
-    cout << "Enter the elements of the array: ";
     for (int i = 0; i < n; i++) {
+        cout << "Enter the "<<i+1<<" element of the array: ";
         cin >> arr[i];
     }
 

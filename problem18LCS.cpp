@@ -5,11 +5,7 @@ int lcs(string s1, string s2) {
     int n = s1.size();
     int m = s2.size();
 
-    // Dynamically allocate memory for the DP table
-    int** dp = (int**)malloc((n + 1) * sizeof(int*));
-    for (int i = 0; i <= n; i++) {
-        dp[i] = (int*)malloc((m + 1) * sizeof(int));
-    }
+    int dp[n+1][m+1];
 
     // Initializing  base cases
     for (int i = 0; i <= n; i++) {
@@ -37,11 +33,6 @@ int main() {
     cin >> s1;
     cout << "Enter the second string : ";
     cin >> s2;
-
-    if (s1.size() > 99 || s2.size() > 99) {
-        cout << "Error: Strings cannot exceed 99 characters." << endl;
-        return 1; 
-    }
 
     cout << "The Length of Longest Common Subsequence is " << lcs(s1, s2) << endl;
 
