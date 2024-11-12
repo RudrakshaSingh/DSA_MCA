@@ -1,18 +1,17 @@
 #include <iostream>
-#include <cstdlib>
 using namespace std;
 
-// Global variables for Queue
-int* queue;
-int front = -1, rear = -1, queue_capacity;
+const int maxsize = 100;
 
-// Global visited array and adjacency matrix
-int* visited;
-int** adjMatrix;
+int queue[maxsize];
+int front = -1, rear = -1;
+
+int visited[maxsize];
+int adjMatrix[maxsize][maxsize];
 int n;  // Number of vertices
 
 void enqueue(int value) {
-    if (rear >= queue_capacity - 1) {
+    if (rear >= maxsize - 1) {
         cout << "Queue Overflow!" << endl;
         return;
     }
@@ -40,7 +39,7 @@ bool isQueueEmpty() {
 }
 
 bool isQueueFull() {
-    return (rear == queue_capacity - 1);
+    return (rear == maxsize - 1);
 }
 
 void Dfs(int v) {
@@ -76,12 +75,6 @@ int main() {
     cout << "Enter the number of vertices: ";
     cin >> n;
 
-    // Dynamically allocate memory for the adjacency matrix
-    adjMatrix = (int**)malloc(n * sizeof(int*));
-    for (int i = 0; i < n; i++) {
-        adjMatrix[i] = (int*)malloc(n * sizeof(int));
-    }
-
     // Initialize the adjacency matrix to 0 (no edges)
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -100,13 +93,9 @@ int main() {
         adjMatrix[v][u] = 1; // For undirected graph
     }
 
-    visited = (int*)malloc(n * sizeof(int));
     for (int i = 0; i < n; i++) {
         visited[i] = 0;  // Mark all vertices as unvisited initially
     }
-
-    queue_capacity = n;
-    queue = (int*)malloc(queue_capacity * sizeof(int));
 
     cout << "\nChoose traversal method:" << endl;
     cout << "1. DFS\n2. BFS" << endl;
@@ -127,13 +116,6 @@ int main() {
         default:
             cout << "Invalid choice!" << endl;
     }
-
-    for (int i = 0; i < n; i++) {
-        free(adjMatrix[i]);
-    }
-    free(adjMatrix);
-    free(visited);
-    free(queue);
 
     return 0;
 }

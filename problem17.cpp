@@ -93,7 +93,8 @@ void dijkstra(int n, int adjMatrix[MAX_VERTICES][MAX_VERTICES], int source) {
         visited[u] = 1;  // Mark node as visited
 
         // Update distances for the neighbors of u
-        for (int v = 0; v < n; v++) {//CHECK EDGE EXIST,CHECK NOT VISITED,,CHECK IF DISTANCE IS STILL NOT INFINITY, CHECK IF IT IS SHORTER
+        //CHECK EDGE EXIST,CHECK NOT VISITED,CHECK IF DISTANCE IS STILL NOT INFINITY, CHECK IF IT IS SHORTER
+        for (int v = 0; v < n; v++) {
             if (adjMatrix[u][v] != 0 && visited[v] == 0 && dist[u] != INT_MAX && dist[u] + adjMatrix[u][v] < dist[v]) {
                 dist[v] = dist[u] + adjMatrix[u][v];
             }
@@ -120,12 +121,6 @@ int main() {
     cout << "Enter the edges (u, v, weight):\n";
     for (int i = 0; i < m; i++) {
         cin >> edges[i].u >> edges[i].v >> edges[i].weight;
-    }
-
-    // Print the edges before the user selects the algorithm
-    cout << "\nEntered edges:\n";
-    for (int i = 0; i < m; i++) {
-        cout << "Edge " << i + 1 << ": " << edges[i].u << " - " << edges[i].v << " (Weight: " << edges[i].weight << ")\n";
     }
 
     int choice;
